@@ -1,13 +1,15 @@
 package com.pongal.seinfeld;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Set;
 
 import android.content.Context;
 import android.view.Gravity;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.pongal.seinfeld.data.Date;
 
 public class CalendarView extends LinearLayout {
 
@@ -19,12 +21,10 @@ public class CalendarView extends LinearLayout {
 		super(context);
 		setOrientation(LinearLayout.VERTICAL);
 		gridView = new GridView(context);
-		calendarAdapter = new CalendarAdapter();
-		gridView.setAdapter(calendarAdapter);
+		calendarAdapter = new CalendarAdapter(gridView);
 		gridView.setNumColumns(7);
 		gridView.setVerticalSpacing(1);
 		gridView.setHorizontalSpacing(1);
-		// gridView.setScrollBarStyle(GridView.SCROLLBARS_INSIDE_INSET);
 		gridView.setVerticalScrollBarEnabled(false);
 		gridView.setLayoutParams(new GridView.LayoutParams(
 				GridView.LayoutParams.FILL_PARENT,
@@ -41,14 +41,17 @@ public class CalendarView extends LinearLayout {
 		addView(gridView);
 	}
 
-	public void setData(Calendar cal) {
-		cal.roll(Calendar.DATE, 1);
-		header.setText(new SimpleDateFormat("MMMM yyyy").format(cal.getTime()));
-		calendarAdapter.setData(cal);
+	public void setData(Date date) {
+		header.setText(new SimpleDateFormat("MMMM yyyy").format(date.getDate()));
+		calendarAdapter.setData(date);
 	}
 
 	public void addSelectHandler(CalendarSelectHandler handler) {
 		calendarAdapter.addSelectHandler(handler);
+	}
+	
+	public void disableDates(Set<Date> dates) {
+		calendarAdapter.disableDates(dates);
 	}
 
 }

@@ -2,51 +2,55 @@ package com.pongal.seinfeld;
 
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.pongal.seinfeld.data.Date;
 
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
 public class CalendarAdapter extends BaseAdapter {
 
-	Calendar calendar;
-	Calendar startDay;
+	Date date;
+	Date startDate;
+	Set<Date> disabledDates = new HashSet<Date>();
 	private int count;
 	String[] headers = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri",
 			"Sat" };
 	private Set<CalendarSelectHandler> selectHandler = new HashSet<CalendarSelectHandler>();
+	GridView view;
 
-	public void setData(Calendar cal) {
-		calendar = cal;
-		startDay = (Calendar) calendar.clone();
+	public CalendarAdapter(GridView view) {
+		this.view = view;
+		this.view.setAdapter(this);
+	}
 
-		int startDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-		startDay.add(Calendar.DATE, 1 - startDayOfWeek);
-		int totalDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+	public void setData(Date theDate) {
+		date = theDate;
+		date.resetToFirstDayOfMonth();
+		startDate = date.clone();
+		int startDayOfWeek = date.getDayOfWeek();
+		startDate.addDays(1 - startDayOfWeek);
+		int totalDays = date.getMaximumDays();
 		Double noOfRows = Math.ceil(((startDayOfWeek - 1 + totalDays) / 7.0));
 		count = noOfRows.intValue() * 7;
+	}
+
+	public void disableDates(Set<Date> dates) {
+		disabledDates = dates;
+		Log.d(null, "Setting disabled dates");
 	}
 
 	@Override
 	public int getCount() {
 		return count + headers.length;
-	}
-
-	@Override
-	public Object getItem(int arg0) {
-		return null;
-	}
-
-	@Override
-	public long getItemId(int arg0) {
-		return 0;
 	}
 
 	@Override
@@ -56,18 +60,44 @@ public class CalendarAdapter extends BaseAdapter {
 			textView = new TextView(parent.getContext());
 			textView.setLayoutParams(new GridView.LayoutParams(-1, 40));
 			textView.setGravity(Gravity.CENTER);
+
 			textView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					view.setBackgroundResource(R.color.calHeaderBg);
-					notifySelectHandlers(true, (Calendar) view.getTag());
+					DateState data = (DateState) view.getTag();
+					data.toggleState();
+					view.setBackgroundResource(data.isSelected() ? R.color.dateSelectedBg : R.color.dateBg);
+					notifySelectHandlers(data);
 				}
 			});
 		}
-		textView.setTag(getCurrentLabelDate(position));
+
+		Date date = getCurrentLabelDate(position);
+		textView.setTag(new DateState(false, date));
+		updateView(textView, position);
+
+		/*updateState(textView, position);
 		updateLabel(textView, position);
-		updateStyle(textView, position);
+		updateStyle(textView, position);*/
 		return textView;
+	}
+	
+	private void updateView(TextView view, int index) {
+		if (index < headers.length) {
+			view.setText(headers[index]);			
+			view.setBackgroundResource(R.color.calHeaderBg);
+			view.setTextAppearance(view.getContext(), R.style.calHeader);
+			view.setEnabled(false);
+		} else {			
+			Date model = ((DateState) view.getTag()).getDate();
+			final boolean sameMonth = model.getMonth() == date.getMonth();
+			final boolean disabledDate = disabledDates.contains(model);
+			
+			view.setText(Integer.toString(model.getDay()));
+			view.setBackgroundResource(R.color.dateBg);
+			view.setTextAppearance(view.getContext(), sameMonth && !disabledDate ? R.style.calField : R.style.calFieldDisabled);
+			view.setEnabled(sameMonth ? !disabledDate : false);
+		}
 	}
 
 	private void updateStyle(TextView view, int index) {
@@ -75,9 +105,9 @@ public class CalendarAdapter extends BaseAdapter {
 			view.setTextAppearance(view.getContext(), R.style.calHeader);
 			view.setBackgroundResource(R.color.calHeaderBg);
 		} else {
-			view.setBackgroundResource(R.color.calFieldBg);
-			Calendar tempDate = (Calendar) view.getTag();
-			if (tempDate.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
+			view.setBackgroundResource(R.color.dateBg);
+			Date tempDate = ((DateState) view.getTag()).getDate();
+			if (tempDate.getMonth() == date.getMonth()) {
 				view.setTextAppearance(view.getContext(), R.style.calField);
 			} else {
 				view.setTextAppearance(view.getContext(),
@@ -90,24 +120,47 @@ public class CalendarAdapter extends BaseAdapter {
 		if (index < headers.length) {
 			view.setText(headers[index]);
 		} else {
-			view.setText(((Calendar) view.getTag()).get(Calendar.DATE) + "");
+			view.setText(((DateState) view.getTag()).getDate().getDay() + "");
 		}
 	}
 
-	private Calendar getCurrentLabelDate(int index) {
+	private void updateState(TextView view, int index) {
+		if (index < headers.length) {
+			view.setEnabled(false);
+		} else {
+			Date tempDate = ((DateState) view.getTag()).getDate();
+			if (tempDate.getMonth() != date.getMonth()) {
+				view.setEnabled(false);
+			} else {
+				view.setEnabled(!disabledDates.contains(tempDate));
+			}
+		}
+	}
+
+	private Date getCurrentLabelDate(int index) {
 		index = index - headers.length;
-		Calendar tempDate = (Calendar) startDay.clone();
-		tempDate.add(Calendar.DATE, index);
-		return tempDate;
+		Date temp = startDate.clone();
+		temp.addDays(index);
+		return temp;
 	}
 
 	public void addSelectHandler(CalendarSelectHandler handler) {
 		selectHandler.add(handler);
 	}
 
-	void notifySelectHandlers(boolean selected, Calendar cal) {
+	void notifySelectHandlers(DateState state) {
 		for (CalendarSelectHandler h : selectHandler) {
-			h.onChange(new CalendarSelectEvent(selected, cal));
+			h.onChange(state);
 		}
+	}
+
+	@Override
+	public Object getItem(int arg0) {
+		return null;
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return 0;
 	}
 }

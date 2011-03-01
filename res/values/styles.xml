@@ -14,5 +14,6 @@
     </style>
     <color name="calHeaderBg">#FF2871BF</color>
     <color name="calHeaderBg2">#FF164F8C</color>
-    <color name="calFieldBg">#FFCAE2FC</color>
+    <color name="dateBg">#FFCAE2FC</color>
+    <color name="dateSelectedBg">#FFCA12FC</color>
 </resources>

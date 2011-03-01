@@ -11,9 +11,10 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int calFieldBg=0x7f060002;
         public static final int calHeaderBg=0x7f060000;
         public static final int calHeaderBg2=0x7f060001;
+        public static final int dateBg=0x7f060002;
+        public static final int dateSelectedBg=0x7f060003;
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
