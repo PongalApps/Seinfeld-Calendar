@@ -21,23 +21,26 @@ public class CalendarView extends LinearLayout {
 		super(context);
 		setOrientation(LinearLayout.VERTICAL);
 		gridView = new GridView(context);
-		calendarAdapter = new CalendarAdapter(gridView);
 		gridView.setNumColumns(7);
-		gridView.setVerticalSpacing(1);
-		gridView.setHorizontalSpacing(1);
+		gridView.setVerticalSpacing(0);
+		gridView.setHorizontalSpacing(0);
 		gridView.setVerticalScrollBarEnabled(false);
 		gridView.setLayoutParams(new GridView.LayoutParams(
 				GridView.LayoutParams.FILL_PARENT,
 				GridView.LayoutParams.FILL_PARENT));
-		gridView.setPadding(3, 3, 0, 3);
-
+		gridView.setPadding(2, 0, 2, 0);
+		calendarAdapter = new CalendarAdapter(gridView);
+		
 		header = new TextView(context);
 		header.setText("");
 		header.setGravity(Gravity.CENTER);
 		header.setPadding(5, 5, 5, 5);
 		header.setTextAppearance(context, R.style.calHeader);
 		header.setBackgroundResource(R.color.calHeaderBg2);
-		addView(header);
+		LayoutParams headerLayout = new LayoutParams(LayoutParams.FILL_PARENT,
+				LayoutParams.WRAP_CONTENT);
+		headerLayout.setMargins(2, 5, 2, 0);
+		addView(header, headerLayout);
 		addView(gridView);
 	}
 

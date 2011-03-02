@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:top="1dp" android:bottom="1dp" android:left="1dp"
+		android:right="1dp">
+		<shape android:shape="rectangle">
+			<gradient android:startColor="#EDEDED" android:endColor="#DEDEDE"
+				android:angle="270" />
+			<corners android:bottomRightRadius="3dp"
+				android:bottomLeftRadius="3dp" android:topLeftRadius="3dp"
+				android:topRightRadius="3dp" />
+		</shape>
+	</item>
+	<item>
+		<shape android:shape="line">
+			<stroke  android:color="#000000" />
+			<!--<size android:height="5sp" />
+			--><!--<solid android:color="@color/dateSelectedBg"></solid>-->
+		</shape>
+	</item>
+	<item android:top="8dp" android:bottom="8dp" android:left="8dp"
+		android:right="8dp">
+		<shape android:shape="rectangle">
+			<!--<stroke android:width="2dp" android:color="#5500ffff" />-->
+			<solid android:color="@color/dateSelectedBg"></solid>
+			<corners android:bottomRightRadius="3dp"
+				android:bottomLeftRadius="3dp" android:topLeftRadius="3dp"
+				android:topRightRadius="3dp" />
+		</shape>
+	</item>
+</layer-list>
+
+	<!--
+		<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+		android:gravity="center" android:src="@drawable/tick"> </bitmap>
+	-->
