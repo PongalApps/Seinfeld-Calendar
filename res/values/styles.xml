@@ -20,4 +20,5 @@
     <color name="calHeaderBg2">#FF164F8C</color>
     <color name="dateBg">#FFCAE2FC</color>
     <color name="dateSelectedBg">#FF0291F7</color>
+    <color name="defaultTextColor">#000000</color>
 </resources>

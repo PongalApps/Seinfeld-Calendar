@@ -1,6 +1,5 @@
 package com.pongal.seinfeld;
 
-import java.text.SimpleDateFormat;
 import java.util.Set;
 
 import android.content.Context;
@@ -10,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pongal.seinfeld.data.Date;
+import com.pongal.seinfeld.data.Task;
 
 public class CalendarView extends LinearLayout {
 
@@ -30,7 +30,7 @@ public class CalendarView extends LinearLayout {
 				GridView.LayoutParams.FILL_PARENT));
 		gridView.setPadding(2, 0, 2, 0);
 		calendarAdapter = new CalendarAdapter(gridView);
-		
+
 		header = new TextView(context);
 		header.setText("");
 		header.setGravity(Gravity.CENTER);
@@ -44,15 +44,16 @@ public class CalendarView extends LinearLayout {
 		addView(gridView);
 	}
 
-	public void setData(Date date) {
-		header.setText(new SimpleDateFormat("MMMM yyyy").format(date.getDate()));
-		calendarAdapter.setData(date);
+	public void setTask(Task task) {
+	    	Date currDate = new Date();
+		header.setText(currDate.format("MMMM yyyy"));
+		calendarAdapter.setData(task);
 	}
 
 	public void addSelectHandler(CalendarSelectHandler handler) {
 		calendarAdapter.addSelectHandler(handler);
 	}
-	
+
 	public void disableDates(Set<Date> dates) {
 		calendarAdapter.disableDates(dates);
 	}

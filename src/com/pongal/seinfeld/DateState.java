@@ -15,7 +15,7 @@ public class DateState {
 	public Status getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(Status status) {
 		this.status = status;
 	}
@@ -30,7 +30,7 @@ public class DateState {
 
 	@Override
 	public String toString() {
-		return "CalendarSelectEvent [data=" + date + ", selected=" + status
+		return "DateState [data=" + date + ", selected=" + status
 				+ "]";
 	}
 
