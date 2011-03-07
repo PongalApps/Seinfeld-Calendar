@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.pongal.seinfeld.Util;
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
 
@@ -22,12 +21,11 @@ public class DBManager {
 	helper = new DBHelper(context);
 	this.db = helper.getWritableDatabase();
     }
-    
+
     public void close() {
 	helper.close();
 	db.close();
     }
-
 
     public void createTask(String text) {
 	db.execSQL("insert into task(name) values (?)", new String[] { text });
@@ -82,12 +80,30 @@ public class DBManager {
 	return exists;
     }
 
+    public void updateTask(Task task) {
+	String insertOrUpdateQuery = "insert or replace into task(id, name) values (?, ?);";
+	db.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText() });
+    }
+
+    public void deleteTask(Task task) {
+	String deleteQuery = "delete from task where id= ?";
+	db.execSQL(deleteQuery, new Object[] { task.getId() });
+    }
+
     private class DBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "SeinfeldCalendar";
 	private static final int DB_VERSION = 1;
 
 	public DBHelper(Context context) {
 	    super(context, DB_NAME, null, DB_VERSION);
+	}
+
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+	    super.onOpen(db);
+	    if (!db.isReadOnly()) {
+		db.execSQL("PRAGMA foreign_keys=ON;");
+	    }
 	}
 
 	@Override

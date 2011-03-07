@@ -6,16 +6,20 @@ import java.util.Set;
 import android.util.Log;
 
 public final class Task {
-	private int id;
+	private Integer id;
 	private String text;
 	private Set<Date> accomplishedDates = new HashSet<Date>();
+	
+	public Task() {
+	    
+	}
 
 	public Task(int id, String text) {
 		this.id = id;
 		this.text = text;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -27,10 +31,6 @@ public final class Task {
 		this.text = text;
 	}
 
-//	public Set<Date> getAccomplishedDates() {
-//		return accomplishedDates;
-//	}
-	
 	public int getAccomplishedDatesCount() {
 	    return accomplishedDates.size();
 	}
