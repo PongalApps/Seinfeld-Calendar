@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="calField">
-        <item name="android:textColor">#000000</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:gravity">center</item>
     </style>
     <style name="calFieldSelected">
@@ -16,8 +16,7 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:gravity">center</item>
     </style>
-    <color name="calHeaderBg">#FF2871BF</color>
-    <color name="calHeaderBg2">#FF164F8C</color>
+    <color name="calHeaderBg">#FF000000</color>
     <color name="dateBg">#FFCAE2FC</color>
     <color name="dateSelectedBg">#FF0291F7</color>
     <color name="defaultTextColor">#000000</color>

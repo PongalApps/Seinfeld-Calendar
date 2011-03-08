@@ -8,13 +8,12 @@
 		<LinearLayout android:orientation="horizontal"
 			android:layout_width="fill_parent" android:id="@+id/header"
 			android:layout_height="wrap_content">
-			<ImageView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:src="@drawable/icon"
-				android:layout_gravity="center" android:id="@+id/imageView1"></ImageView>
-			<TextView android:text="Seinfeld Calendar"
-				android:layout_width="fill_parent" android:textSize="24sp"
-				android:layout_height="wrap_content" android:layout_gravity="center"
-				android:id="@+id/mainHeading" android:paddingLeft="10sp"></TextView>
+			<TextView android:text="Seinfeld Calendar" android:textSize="24sp"
+				android:layout_height="wrap_content" android:id="@+id/mainHeading"
+				android:paddingLeft="10sp" android:layout_gravity="center"
+				android:layout_width="fill_parent" android:gravity="center"
+				android:paddingTop="5sp" android:paddingBottom="5sp"
+				android:background="@layout/headerbg"></TextView>
 		</LinearLayout>
 		<ScrollView android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:fillViewport="true"

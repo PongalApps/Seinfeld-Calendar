@@ -5,14 +5,14 @@
 	<uses-sdk android:minSdkVersion="7" />
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
-		android:theme="@android:style/Theme.Light.NoTitleBar">
-		<activity android:label="@string/app_name" android:name=".task.TaskActivity">
+		android:theme="@android:style/Theme.Black.NoTitleBar" >
+		<activity android:label="@string/app_name" android:name=".task.TaskActivity" android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="CalendarActivity" android:label="@string/app_name">
+		<activity android:name="CalendarActivity" android:label="@string/app_name" android:screenOrientation="portrait">
 		</activity>
 
 	</application>

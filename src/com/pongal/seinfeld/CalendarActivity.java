@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.widget.LinearLayout;
 
 import com.pongal.seinfeld.DateState.Status;
@@ -26,19 +28,31 @@ public class CalendarActivity extends Activity {
 
 	setContentView(R.layout.main);
 	LinearLayout wrapper = (LinearLayout) findViewById(R.id.wrapper);
+	wrapper.setOrientation(LinearLayout.VERTICAL);
 
 	CalendarView calendar = new CalendarView(getApplicationContext());
 	calendar.setTask(task);
+	calendar.setLayoutParams(new LinearLayout.LayoutParams(-1, getCalendarHeight()));
 	disableDates(calendar);
 	wrapper.addView(calendar);
 
 	calendar.addSelectHandler(new CalendarSelectHandler() {
 	    @Override
 	    public void onChange(DateState e) {
-		Log.d(null, "Status: " + e);
 		manager.updateTaskCalendar(taskId, e.getDate(), (e.getStatus() == Status.SELECTED) ? true : false);
 	    }
 	});
+    }
+
+    private int getCalendarHeight() {
+	Display display = getWindowManager().getDefaultDisplay();
+	int windowHeight = display.getHeight();
+//	if (display.getOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+//	    windowHeight = display.getHeight();
+//	} else {
+//	    windowHeight = display.getHeight();
+//	}
+	return Util.getInDIP(windowHeight * 2 / 3, getApplicationContext());
     }
 
     private void initDBManager() {

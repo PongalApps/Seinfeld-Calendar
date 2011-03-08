@@ -77,16 +77,16 @@ public class CalendarAdapter extends BaseAdapter {
 	    } else {
 		model = (DateState)textView.getTag();
 	    }
+	    Log.d(null,"Moidel : "+model + " Position : " + position);
 	    textView.setText(Integer.toString(model.getDate().getDay()));
 	    refreshStyle(textView);
-	    Log.d(null, "position : " + position + " model : " + model);
 	    return textView;
 	}
     }
 
     private TextView createDateCell(Context context) {
 	TextView textView = new TextView(context);
-	textView.setLayoutParams(new GridView.LayoutParams(-1, Util.getInDIP(36, context)));
+	textView.setLayoutParams(new GridView.LayoutParams(-1, Util.getInDIP(45, context)));
 	textView.setGravity(Gravity.CENTER);
 	textView.setOnClickListener(getDateClickListener());
 	return textView;

@@ -35,7 +35,8 @@ public class TaskListView extends LinearLayout {
 	LinearLayout body = (LinearLayout) findViewById(R.id.body);
 	for (Task task : tasks) {
 	    LinearLayout row = new LinearLayout(context);
-	    row.setBackgroundResource(R.layout.datebg);
+	    row.setBackgroundResource(R.layout.taskbg);
+	    row.getBackground().setDither(true);
 	    row.setTag(task);
 	    if (listener != null) {
 		row.setOnClickListener(listener);
@@ -51,7 +52,8 @@ public class TaskListView extends LinearLayout {
 
 	    TextView item = new TextView(context);
 	    item.setText(task.getText());
-	    item.setTextColor(Color.BLACK);
+	    item.setTextColor(Color.WHITE);
+	    item.setPadding(10, 0, 0, 0);
 	    item.setGravity(Gravity.LEFT);
 	    row.addView(item);
 	    body.addView(row);

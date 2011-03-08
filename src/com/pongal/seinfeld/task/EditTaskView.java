@@ -8,10 +8,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.data.Task;
@@ -49,6 +47,7 @@ public class EditTaskView extends Dialog {
 
 	cancelButton.setOnClickListener(getCancelHandler());
 	okButton.setOnClickListener(getSaveHandler());
+	okButton.layout(0, 0, 0, 0);
 	okButton.setText(type == ADD_TASK ? "Add" : "Edit");
 	taskName.setText(task.getText());
 
