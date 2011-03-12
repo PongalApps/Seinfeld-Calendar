@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 
 import com.pongal.seinfeld.CalendarActivity;
+import com.pongal.seinfeld.CalendarAdapter;
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;

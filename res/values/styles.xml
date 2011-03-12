@@ -19,5 +19,5 @@
     <color name="calHeaderBg">#FF000000</color>
     <color name="dateBg">#FFCAE2FC</color>
     <color name="dateSelectedBg">#FF0291F7</color>
-    <color name="defaultTextColor">#000000</color>
+    <color name="defaultTextColor">#FFFFFF</color>
 </resources>

@@ -5,10 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import com.pongal.seinfeld.Util;
-
-import android.util.Log;
-
 public class Date implements Cloneable {
 
     Calendar calendar = Calendar.getInstance();
@@ -54,6 +50,10 @@ public class Date implements Cloneable {
     public int getMonth() {
 	return calendar.get(Calendar.MONTH);
     }
+    
+    public void addMonths(int count) {
+	calendar.add(Calendar.MONTH, count);
+    }
 
     public int getYear() {
 	return calendar.get(Calendar.YEAR);
@@ -69,6 +69,11 @@ public class Date implements Cloneable {
 
     public String format(String format) {
 	return new SimpleDateFormat(format).format(calendar.getTime());
+    }
+    
+    public boolean isFutureDate() {
+	Date currentDate = new Date();
+	return calendar.after(currentDate.calendar);
     }
 
     @Override

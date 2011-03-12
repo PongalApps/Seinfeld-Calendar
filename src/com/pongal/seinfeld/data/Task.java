@@ -40,9 +40,11 @@ public final class Task {
 	}
 	
 	public void addAccomplishedDates(Date date) {
-		Log.d(null, "Adding: " + date + " : "
-				+ accomplishedDates.contains(date));
 		this.accomplishedDates.add(date);
+	}
+
+	public void removeAccomplishedDates(Date date) {
+	    this.accomplishedDates.remove(date);
 	}
 
 }

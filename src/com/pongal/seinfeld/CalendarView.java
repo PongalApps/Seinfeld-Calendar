@@ -1,9 +1,9 @@
 package com.pongal.seinfeld;
 
-import java.util.Set;
-
 import android.content.Context;
-import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,69 +13,63 @@ import com.pongal.seinfeld.data.Task;
 
 public class CalendarView extends LinearLayout {
 
-	CalendarAdapter calendarAdapter;
-	TextView taskName;
-	TextView header;
-	GridView gridView;
+    CalendarAdapter calendarAdapter;
+    TextView taskName;
+    TextView monthYr;
+    GridView gridView;
+    TextView notes;
+    Date displayedMonth;
+    Button nextMonthBtn;
 
-	public CalendarView(Context context) {
-		super(context);
-		setOrientation(LinearLayout.VERTICAL);
-		gridView = new GridView(context);
-		gridView.setNumColumns(7);
-		gridView.setVerticalSpacing(0);
-		gridView.setHorizontalSpacing(0);
-		gridView.setVerticalScrollBarEnabled(false);
-		gridView.setLayoutParams(new GridView.LayoutParams(
-				GridView.LayoutParams.FILL_PARENT,
-				GridView.LayoutParams.FILL_PARENT));
-		gridView.setPadding(2, 0, 2, 0);
-		calendarAdapter = new CalendarAdapter(gridView);
+    public CalendarView(Context context) {
+	super(context);
+	LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	init(inflater);
+	taskName = (TextView) findViewById(R.id.cal_taskName);
+	monthYr = (TextView) findViewById(R.id.cal_monthYr);
+	gridView = (GridView) findViewById(R.id.cal_datesGrid);
+	calendarAdapter = new CalendarAdapter(gridView);
+	notes = (TextView) findViewById(R.id.cal_notes);
+	Button prevMonth = (Button) findViewById(R.id.cal_preMonth);
+	prevMonth.setOnClickListener(getPrevMonthHandler(-1));
+	nextMonthBtn = (Button) findViewById(R.id.cal_nextMonth);
+	nextMonthBtn.setOnClickListener(getPrevMonthHandler(1));
+    }
 
-		taskName = new TextView(context);
-		taskName.setGravity(Gravity.CENTER);
-		taskName.setBackgroundResource(R.layout.headerbg);
-		LayoutParams taskNameLayout = new LayoutParams(LayoutParams.FILL_PARENT,
-			LayoutParams.WRAP_CONTENT);
-		taskNameLayout.setMargins(0, 10, 0, 20);
-		
-		header = new TextView(context);
-		header.setText("");
-		header.setGravity(Gravity.CENTER);
-		header.setPadding(5, 5, 5, 5);
-		header.setTextAppearance(context, R.style.calHeader);
-		header.setBackgroundResource(R.layout.taskheaderbg);
-		LayoutParams headerLayout = new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.WRAP_CONTENT);
-		headerLayout.setMargins(2, 5, 2, 0);
-		
-		TextView footer = new TextView(context);
-		footer.setText("abc ");
-		header.setTextAppearance(context, R.style.calHeader);
-		footer.setBackgroundResource(R.color.calHeaderBg);
-		LayoutParams footerLayout = new LayoutParams(LayoutParams.FILL_PARENT,
-			LayoutParams.WRAP_CONTENT);
-		
-		addView(taskName, taskNameLayout);
-		addView(header, headerLayout);
-		addView(gridView);
-		addView(footer, footerLayout);
-		
-	}
+    public void setTask(Task task) {
+	displayedMonth = new Date();
+	monthYr.setText(displayedMonth.format("MMMM yyyy"));
+	taskName.setText(task.getText());
+	calendarAdapter.setData(task, displayedMonth);
+	setNextMonthButtonState();
+    }
 
-	public void setTask(Task task) {
-	    	Date currDate = new Date();
-		header.setText(currDate.format("MMMM yyyy"));
-		taskName.setText(task.getText());
-		calendarAdapter.setData(task);
-	}
+    public void addSelectHandler(CalendarSelectHandler handler) {
+	calendarAdapter.addSelectHandler(handler);
+    }
 
-	public void addSelectHandler(CalendarSelectHandler handler) {
-		calendarAdapter.addSelectHandler(handler);
-	}
+    private void init(LayoutInflater inflater) {
+	LinearLayout contents = (LinearLayout) inflater.inflate(R.layout.cal_view, null);
+	contents.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+	addView(contents);
+    }
 
-	public void disableDates(Set<Date> dates) {
-		calendarAdapter.disableDates(dates);
-	}
+    private OnClickListener getPrevMonthHandler(final int count) {
+	return new OnClickListener() {
+	    public void onClick(View v) {
+		displayedMonth.addMonths(count);
+		monthYr.setText(displayedMonth.format("MMMM yyyy"));
+		calendarAdapter.setData(displayedMonth);
+		gridView.invalidateViews();
+		setNextMonthButtonState();
+	    }
+	};
+    }
+    
+    private void setNextMonthButtonState() {
+	Date nextMonth = displayedMonth.clone();
+	nextMonth.addMonths(1);
+	nextMonthBtn.setEnabled(!nextMonth.isFutureDate());	
+    }
 
 }

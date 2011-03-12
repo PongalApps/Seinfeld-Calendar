@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:orientation="vertical"
+	android:layout_height="fill_parent">
+	<TextView android:layout_height="wrap_content" android:text="TextView"
+		android:layout_gravity="center" android:layout_width="wrap_content"
+		android:id="@+id/cal_taskName" android:textAppearance="@style/calHeader"
+		android:textStyle="bold" android:gravity="center" android:ellipsize="end"
+		android:textSize="18dip" android:paddingTop="10dp" android:paddingBottom="10dp" android:singleLine="true"></TextView>
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:background="@layout/datebg">
+		<Button android:text=" &lt; " android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textAppearance="@style/calHeader"
+			android:id="@+id/cal_preMonth"></Button>
+		<TextView android:id="@+id/cal_monthYr" android:gravity="center"
+			android:layout_gravity="center" android:layout_weight="1"
+			android:textAppearance="@style/calHeader" android:layout_height="fill_parent"
+			android:layout_width="fill_parent" android:textSize="16dip"></TextView>
+		<Button android:text=" &gt; " android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:textAppearance="@style/calHeader"
+			android:id="@+id/cal_nextMonth"></Button>
+	</LinearLayout>
+	<GridView android:layout_width="fill_parent"
+		android:layout_weight="1" android:layout_height="wrap_content"
+		android:id="@+id/cal_datesGrid"></GridView>
+	<TextView android:id="@+id/cal_notes" android:layout_width="fill_parent"
+		android:text="" android:layout_weight="0" android:layout_height="wrap_content"></TextView>
+</LinearLayout>

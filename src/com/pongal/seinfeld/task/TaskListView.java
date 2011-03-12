@@ -7,6 +7,7 @@ import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,9 +52,11 @@ public class TaskListView extends LinearLayout {
 	    row.addView(chkBox);
 
 	    TextView item = new TextView(context);
+	    item.setSingleLine();
+	    item.setEllipsize(TextUtils.TruncateAt.END);
 	    item.setText(task.getText());
 	    item.setTextColor(Color.WHITE);
-	    item.setPadding(10, 0, 0, 0);
+	    item.setPadding(10, 0, 10, 0);
 	    item.setGravity(Gravity.LEFT);
 	    row.addView(item);
 	    body.addView(row);

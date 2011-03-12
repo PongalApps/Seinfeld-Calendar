@@ -7,7 +7,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
@@ -54,7 +53,6 @@ public class DBManager {
 	    dates.close();
 	}
 	result.close();
-	Log.d(null, "total dates: " + task.getAccomplishedDatesCount());
 	return task;
     }
 
@@ -86,8 +84,11 @@ public class DBManager {
     }
 
     public void deleteTask(Task task) {
+	Object[] params = new Object[] { task.getId() };
+	String dateDeleteQuery = "delete from Status where task_id= ?";
+	db.execSQL(dateDeleteQuery, params);
 	String deleteQuery = "delete from task where id= ?";
-	db.execSQL(deleteQuery, new Object[] { task.getId() });
+	db.execSQL(deleteQuery, params);
     }
 
     private class DBHelper extends SQLiteOpenHelper {
