@@ -17,8 +17,9 @@ public final class R {
         public static final int defaultTextColor=0x7f060003;
     }
     public static final class drawable {
-        public static final int icon=0x7f020000;
-        public static final int tick=0x7f020001;
+        public static final int background=0x7f020000;
+        public static final int icon=0x7f020001;
+        public static final int tick=0x7f020002;
     }
     public static final class id {
         public static final int addTask=0x7f070008;
@@ -55,6 +56,7 @@ public final class R {
         public static final int hello=0x7f040000;
     }
     public static final class style {
+        public static final int Theme_NoBackground=0x7f050004;
         public static final int calField=0x7f050000;
         public static final int calFieldDisabled=0x7f050002;
         public static final int calFieldSelected=0x7f050001;
