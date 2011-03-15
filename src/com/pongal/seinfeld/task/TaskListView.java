@@ -11,7 +11,9 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
@@ -37,7 +39,8 @@ public class TaskListView extends LinearLayout {
 	for (Task task : tasks) {
 	    LinearLayout row = new LinearLayout(context);
 	    row.setBackgroundResource(R.layout.taskbg);
-	    row.getBackground().setDither(true);
+	    //row.getBackground().setDither(true);
+	    row.setOnTouchListener(getHighlightListener());
 	    row.setTag(task);
 	    if (listener != null) {
 		row.setOnClickListener(listener);
@@ -89,5 +92,23 @@ public class TaskListView extends LinearLayout {
     public void addSelectionChangedHandler(TaskSelectionChangedHandler handler) {
 	selectionChangeHandler = handler;
     }
+    
+	private OnTouchListener getHighlightListener() {
+		return new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN
+						|| event.getAction() == MotionEvent.ACTION_MOVE) {
+					v.setBackgroundResource(R.layout.taskbg_highlt);
+				}
+				if (event.getAction() == MotionEvent.ACTION_UP
+						|| event.getAction() == MotionEvent.ACTION_CANCEL) {
+					v.setBackgroundResource(R.layout.taskbg);
+				}
+				return false;
+			}
+		};
+	}
+
 
 }

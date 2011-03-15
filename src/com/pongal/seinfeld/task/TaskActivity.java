@@ -32,26 +32,28 @@ public class TaskActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	taskView = new TaskListView(getApplicationContext());
 	taskView.addSelectionChangedHandler(getTaskSelectionChangedHandler());
-	initDBManager();
-	refreshTaskList();
 	setContentView(taskView);
-
+	
 	addTask = (Button) findViewById(R.id.addTask);
 	addTask.setOnClickListener(getAddTaskClickHandler(EditTaskView.ADD_TASK));
 
 	deleteTask = (Button) findViewById(R.id.deleteTask);
 	deleteTask.setOnClickListener(getDeleteTaskClickHandler());
-	deleteTask.setEnabled(false);
 
 	editTask = (Button) findViewById(R.id.editTask);
 	editTask.setOnClickListener(getAddTaskClickHandler(EditTaskView.EDIT_TASK));
-	editTask.setEnabled(false);
+	
+	initDBManager();
+	refreshTaskList();
+	
     }
 
     private void refreshTaskList() {
 	taskView.clear();
 	Set<Task> tasks = manager.getTasks();
 	taskView.addTasks(tasks, getTaskClickHandler());
+	deleteTask.setEnabled(false);
+	editTask.setEnabled(false);
     }
 
     private OnClickListener getTaskClickHandler() {
