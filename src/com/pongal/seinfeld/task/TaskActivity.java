@@ -7,15 +7,13 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.GridView;
 
 import com.pongal.seinfeld.CalendarActivity;
-import com.pongal.seinfeld.CalendarAdapter;
 import com.pongal.seinfeld.R;
+import com.pongal.seinfeld.SplashScreenActivity;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
 
@@ -32,8 +30,9 @@ public class TaskActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	taskView = new TaskListView(getApplicationContext());
 	taskView.addSelectionChangedHandler(getTaskSelectionChangedHandler());
+	taskView.addQuestionClickListener(getQuestionIconListener());
 	setContentView(taskView);
-	
+
 	addTask = (Button) findViewById(R.id.addTask);
 	addTask.setOnClickListener(getAddTaskClickHandler(EditTaskView.ADD_TASK));
 
@@ -42,10 +41,10 @@ public class TaskActivity extends Activity {
 
 	editTask = (Button) findViewById(R.id.editTask);
 	editTask.setOnClickListener(getAddTaskClickHandler(EditTaskView.EDIT_TASK));
-	
+
 	initDBManager();
 	refreshTaskList();
-	
+
     }
 
     private void refreshTaskList() {
@@ -63,6 +62,16 @@ public class TaskActivity extends Activity {
 		Task task = (Task) view.getTag();
 		Intent intent = new Intent(TaskActivity.this, CalendarActivity.class);
 		intent.putExtra("taskId", task.getId());
+		startActivity(intent);
+	    }
+	};
+    }
+
+    public OnClickListener getQuestionIconListener() {
+	return new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		Intent intent = new Intent(TaskActivity.this, SplashScreenActivity.class);
 		startActivity(intent);
 	    }
 	};

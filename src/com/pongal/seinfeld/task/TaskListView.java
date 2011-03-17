@@ -1,24 +1,22 @@
 package com.pongal.seinfeld.task;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.data.Task;
@@ -28,10 +26,15 @@ public class TaskListView extends LinearLayout {
     Context context;
     TaskSelectionChangedHandler selectionChangeHandler;
 
-    public TaskListView(Context context) {
+    public TaskListView(final Context context) {
 	super(context);
 	this.context = context;
 	addView(getTasksView());
+    }
+
+    public void addQuestionClickListener(OnClickListener clickListener) {
+	ImageView questionView = (ImageView) findViewById(R.id.questionImg);
+	questionView.setOnClickListener(clickListener);
     }
 
     public void addTasks(Set<Task> tasks, OnClickListener listener) {
@@ -39,7 +42,7 @@ public class TaskListView extends LinearLayout {
 	for (Task task : tasks) {
 	    LinearLayout row = new LinearLayout(context);
 	    row.setBackgroundResource(R.layout.taskbg);
-	    //row.getBackground().setDither(true);
+	    // row.getBackground().setDither(true);
 	    row.setOnTouchListener(getHighlightListener());
 	    row.setTag(task);
 	    if (listener != null) {
@@ -88,27 +91,24 @@ public class TaskListView extends LinearLayout {
 	}
 	return selected;
     }
-    
+
     public void addSelectionChangedHandler(TaskSelectionChangedHandler handler) {
 	selectionChangeHandler = handler;
     }
-    
-	private OnTouchListener getHighlightListener() {
-		return new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN
-						|| event.getAction() == MotionEvent.ACTION_MOVE) {
-					v.setBackgroundResource(R.layout.taskbg_highlt);
-				}
-				if (event.getAction() == MotionEvent.ACTION_UP
-						|| event.getAction() == MotionEvent.ACTION_CANCEL) {
-					v.setBackgroundResource(R.layout.taskbg);
-				}
-				return false;
-			}
-		};
-	}
 
+    private OnTouchListener getHighlightListener() {
+	return new OnTouchListener() {
+	    @Override
+	    public boolean onTouch(View v, MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
+		    v.setBackgroundResource(R.layout.taskbg_highlt);
+		}
+		if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+		    v.setBackgroundResource(R.layout.taskbg);
+		}
+		return false;
+	    }
+	};
+    }
 
 }
