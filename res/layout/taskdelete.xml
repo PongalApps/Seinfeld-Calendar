@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:background="@layout/taskbg" android:minHeight="50sp">
+    <TextView android:text="TextView" android:layout_height="fill_parent" android:gravity="left|center_vertical" android:singleLine="true" android:ellipsize="end" android:id="@+id/taskName" android:textColor="#FFFFFF" android:paddingRight="10dp" android:paddingLeft="20dp" android:layout_width="wrap_content" android:layout_weight="1"></TextView>
+    <ImageView android:layout_width="wrap_content" android:id="@+id/imageView1" android:layout_height="fill_parent" android:paddingLeft="10dp" android:paddingRight="10dp" android:src="@drawable/trashcan"></ImageView>
+</LinearLayout>

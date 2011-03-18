@@ -22,19 +22,6 @@
 				android:id="@+id/body" android:orientation="vertical">
 			</LinearLayout>
 		</ScrollView>
-		<LinearLayout android:orientation="horizontal"
-			android:layout_width="fill_parent" android:layout_height="wrap_content"
-			android:id="@+id/footer" android:layout_alignParentBottom="true">
-			<Button android:id="@+id/addTask" android:layout_width="fill_parent"
-				android:layout_weight="1" android:layout_height="wrap_content"
-				android:text="Add"></Button>
-			<Button android:id="@+id/editTask" android:layout_width="fill_parent"
-				android:layout_weight="1" android:layout_height="wrap_content"
-				android:text="Edit"></Button>
-			<Button android:id="@+id/deleteTask" android:layout_width="fill_parent"
-				android:layout_weight="1" android:layout_height="wrap_content"
-				android:text="Delete"></Button>
-		</LinearLayout>
 
 	</RelativeLayout>
 </LinearLayout>

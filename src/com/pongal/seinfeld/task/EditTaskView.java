@@ -48,7 +48,7 @@ public class EditTaskView extends Dialog {
 	cancelButton.setOnClickListener(getCancelHandler());
 	okButton.setOnClickListener(getSaveHandler());
 	okButton.layout(0, 0, 0, 0);
-	okButton.setText(type == ADD_TASK ? "Add" : "Edit");
+	okButton.setText("Ok");
 	taskName.setText(task.getText());
 
 //	taskName.requestFocus();

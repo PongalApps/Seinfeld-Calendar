@@ -5,15 +5,10 @@ import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,47 +19,32 @@ import com.pongal.seinfeld.data.Task;
 public class TaskListView extends LinearLayout {
 
     Context context;
-    TaskSelectionChangedHandler selectionChangeHandler;
-
+    ImageView questionView;
+    
     public TaskListView(final Context context) {
 	super(context);
 	this.context = context;
 	addView(getTasksView());
+	questionView = (ImageView) findViewById(R.id.questionImg);
+	questionView.setVisibility(View.GONE);
     }
 
     public void addQuestionClickListener(OnClickListener clickListener) {
-	ImageView questionView = (ImageView) findViewById(R.id.questionImg);
+	questionView.setVisibility(View.VISIBLE);
 	questionView.setOnClickListener(clickListener);
     }
 
-    public void addTasks(Set<Task> tasks, OnClickListener listener) {
+    public void addTasks(Set<Task> tasks, int taskLayout, OnClickListener listener) {
 	LinearLayout body = (LinearLayout) findViewById(R.id.body);
 	for (Task task : tasks) {
-	    LinearLayout row = new LinearLayout(context);
-	    row.setBackgroundResource(R.layout.taskbg);
-	    // row.getBackground().setDither(true);
+	    LinearLayout row = getATaskView(taskLayout);
 	    row.setOnTouchListener(getHighlightListener());
 	    row.setTag(task);
 	    if (listener != null) {
 		row.setOnClickListener(listener);
 	    }
-
-	    CheckBox chkBox = new CheckBox(context);
-	    chkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		    selectionChangeHandler.onSelectionChange(getSelections());
-		}
-	    });
-	    row.addView(chkBox);
-
-	    TextView item = new TextView(context);
-	    item.setSingleLine();
-	    item.setEllipsize(TextUtils.TruncateAt.END);
+	    TextView item = (TextView) row.findViewById(R.id.taskName);
 	    item.setText(task.getText());
-	    item.setTextColor(Color.WHITE);
-	    item.setPadding(10, 0, 10, 0);
-	    item.setGravity(Gravity.LEFT);
-	    row.addView(item);
 	    body.addView(row);
 	}
     }
@@ -74,26 +54,14 @@ public class TaskListView extends LinearLayout {
 	return inflater.inflate(R.layout.tasklist, null);
     }
 
+    private LinearLayout getATaskView(int taskLayout) {
+	LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	return (LinearLayout) inflater.inflate(taskLayout, null);
+    }
+
     public void clear() {
 	LinearLayout body = (LinearLayout) findViewById(R.id.body);
 	body.removeAllViews();
-    }
-
-    public List<Task> getSelections() {
-	List<Task> selected = new ArrayList<Task>();
-	LinearLayout body = (LinearLayout) findViewById(R.id.body);
-	for (int i = 0; i < body.getChildCount(); i++) {
-	    LinearLayout row = (LinearLayout) body.getChildAt(i);
-	    CheckBox chkBox = (CheckBox) row.getChildAt(0);
-	    if (chkBox.isChecked()) {
-		selected.add((Task) row.getTag());
-	    }
-	}
-	return selected;
-    }
-
-    public void addSelectionChangedHandler(TaskSelectionChangedHandler handler) {
-	selectionChangeHandler = handler;
     }
 
     private OnTouchListener getHighlightListener() {

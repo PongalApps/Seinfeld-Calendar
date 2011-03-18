@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.pongal.seinfeld" android:versionName="1.1" android:versionCode="2">
+	package="com.pongal.seinfeld" android:versionName="1.1"
+	android:versionCode="2">
 	<uses-sdk android:minSdkVersion="7" />
 
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
@@ -15,7 +16,13 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="CalendarActivity" android:label="@string/app_name"
+		<activity android:label="@string/app_name" android:name=".task.DeleteTaskListActivity"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity android:label="@string/app_name" android:name=".task.EditTaskListActivity"
+			android:screenOrientation="portrait">
+		</activity>
+		<activity android:label="@string/app_name" android:name="CalendarActivity"
 			android:screenOrientation="portrait">
 		</activity>
 	</application>
