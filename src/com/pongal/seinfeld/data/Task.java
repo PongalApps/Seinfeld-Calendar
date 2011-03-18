@@ -3,15 +3,12 @@ package com.pongal.seinfeld.data;
 import java.util.HashSet;
 import java.util.Set;
 
-import android.util.Log;
-
 public final class Task {
 	private Integer id;
 	private String text;
 	private Set<Date> accomplishedDates = new HashSet<Date>();
 	
 	public Task() {
-	    
 	}
 
 	public Task(int id, String text) {

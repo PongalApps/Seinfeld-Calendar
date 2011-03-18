@@ -1,14 +1,11 @@
 package com.pongal.seinfeld.task;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;

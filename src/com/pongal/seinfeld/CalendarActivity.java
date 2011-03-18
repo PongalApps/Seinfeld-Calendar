@@ -2,7 +2,6 @@ package com.pongal.seinfeld;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.Display;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
