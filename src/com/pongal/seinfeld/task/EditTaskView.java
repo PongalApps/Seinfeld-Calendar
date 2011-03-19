@@ -35,7 +35,6 @@ public class EditTaskView extends Dialog {
 	setContentView(R.layout.edittask);
 	LayoutParams params = getWindow().getAttributes();
 	params.width = LayoutParams.FILL_PARENT;
-	setTitle("Add Task");
     }
 
     public void init(final Task task, int type, final TaskUpdatedHandler handler) {
@@ -45,16 +44,12 @@ public class EditTaskView extends Dialog {
 	this.okButton = (Button) findViewById(R.id.addTask);
 	this.cancelButton = (Button) findViewById(R.id.cancelTask);
 
+	setTitle(type == EditTaskView.EDIT_TASK ? "Edit Task" : "Add Task");
 	cancelButton.setOnClickListener(getCancelHandler());
 	okButton.setOnClickListener(getSaveHandler());
 	okButton.layout(0, 0, 0, 0);
 	okButton.setText("Ok");
 	taskName.setText(task.getText());
-
-//	taskName.requestFocus();
-//	InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(
-//		Context.INPUT_METHOD_SERVICE);
-//	inputMethodManager.showSoftInput(taskName, InputMethodManager.SHOW_FORCED);
 
 	taskName.addTextChangedListener(new TextWatcher() {
 	    public void onTextChanged(CharSequence charsequence, int i, int j, int k) {
