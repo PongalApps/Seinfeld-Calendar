@@ -17,13 +17,16 @@ public final class R {
         public static final int defaultTextColor=0x7f060003;
     }
     public static final class drawable {
-        public static final int background=0x7f020000;
-        public static final int editpad=0x7f020001;
-        public static final int icon=0x7f020002;
-        public static final int pongal=0x7f020003;
-        public static final int question=0x7f020004;
-        public static final int splash=0x7f020005;
-        public static final int trashcan=0x7f020006;
+        public static final int add_black=0x7f020000;
+        public static final int background=0x7f020001;
+        public static final int delete_black=0x7f020002;
+        public static final int delete_white=0x7f020003;
+        public static final int edit_black=0x7f020004;
+        public static final int edit_white=0x7f020005;
+        public static final int icon=0x7f020006;
+        public static final int pongal=0x7f020007;
+        public static final int question=0x7f020008;
+        public static final int splash=0x7f020009;
     }
     public static final class id {
         public static final int aboutContent=0x7f08000c;
@@ -35,11 +38,9 @@ public final class R {
         public static final int cal_notes=0x7f080006;
         public static final int cal_preMonth=0x7f080002;
         public static final int cal_taskName=0x7f080000;
-        public static final int cancelBtn=0x7f080017;
         public static final int cancelTask=0x7f080009;
-        public static final int deleteTask=0x7f080019;
-        public static final int doneBtn=0x7f080016;
-        public static final int editTask=0x7f080018;
+        public static final int deleteTask=0x7f080017;
+        public static final int editTask=0x7f080016;
         public static final int footer=0x7f080014;
         public static final int header=0x7f080011;
         public static final int imageView1=0x7f08000d;
@@ -71,8 +72,7 @@ public final class R {
         public static final int tasklist=0x7f03000e;
     }
     public static final class menu {
-        public static final int okcancelmenu=0x7f070000;
-        public static final int taskmenu=0x7f070001;
+        public static final int taskmenu=0x7f070000;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
