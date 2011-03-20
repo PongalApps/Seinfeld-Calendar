@@ -3,6 +3,7 @@ package com.pongal.seinfeld.db;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -42,15 +43,23 @@ public class DBManager {
 
     public Task getTaskDetails(int taskId) {
 	Task task = null;
-	Cursor result = db.rawQuery("select * from Task where id = ?", new String[] { taskId + "" });
+	String[] taskIds = new String[] { taskId + "" };
+	Cursor result = db.rawQuery("select * from Task where id = ?", taskIds);
 	while (result.moveToNext()) {
 	    task = new Task(result.getInt(0), result.getString(1));
-	    Cursor dates = db.rawQuery("select date from Status where task_id = ?", new String[] { taskId + "" });
+	    Cursor dates = db.rawQuery("select date from Status where task_id = ?", taskIds);
 	    while (dates.moveToNext()) {
 		Date date = new Date(dates.getString(0));
 		task.addAccomplishedDates(date);
 	    }
 	    dates.close();
+
+	    Cursor notes = db.rawQuery("select date, notes from Notes where task_id = ?", taskIds);
+	    while (notes.moveToNext()) {
+		Date date = new Date(notes.getString(0));
+		String noteStr = notes.getString(1);
+		task.putNote(date, noteStr);
+	    }
 	}
 	result.close();
 	return task;
@@ -67,6 +76,31 @@ public class DBManager {
 	}
     }
 
+    public void updateTask(Task task) {
+	String insertOrUpdateQuery = "insert or replace into task(id, name) values (?, ?);";
+	db.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText() });
+    }
+
+    public void updateNotes(int taskId, Date date, String notes) {
+	String[] selector = new String[] { taskId + "", date.toString() };
+	ContentValues values = new ContentValues();
+	values.put("Notes", notes);
+	int updateCnt = db.update("Notes", values, "task_id = ? and date = ?", selector);
+	if (updateCnt == 0) {
+	    values.put("task_id", taskId);
+	    values.put("Date", date.toString());
+	    db.insert("Notes", null, values);
+	}
+    }
+
+    public void deleteTask(Task task) {
+	Object[] params = new Object[] { task.getId() };
+	String dateDeleteQuery = "delete from Status where task_id= ?";
+	db.execSQL(dateDeleteQuery, params);
+	String deleteQuery = "delete from task where id= ?";
+	db.execSQL(deleteQuery, params);
+    }
+
     private boolean checkExistence(int taskId, Date date) {
 	boolean exists = false;
 	String query = "select * from Status where task_id = ? and date = ?";
@@ -78,22 +112,9 @@ public class DBManager {
 	return exists;
     }
 
-    public void updateTask(Task task) {
-	String insertOrUpdateQuery = "insert or replace into task(id, name) values (?, ?);";
-	db.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText() });
-    }
-
-    public void deleteTask(Task task) {
-	Object[] params = new Object[] { task.getId() };
-	String dateDeleteQuery = "delete from Status where task_id= ?";
-	db.execSQL(dateDeleteQuery, params);
-	String deleteQuery = "delete from task where id= ?";
-	db.execSQL(deleteQuery, params);
-    }
-
     private class DBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "SeinfeldCalendar";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 
 	public DBHelper(Context context) {
 	    super(context, DB_NAME, null, DB_VERSION);
@@ -117,8 +138,12 @@ public class DBManager {
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
-	    // Nothing as of now for the first version
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	    if (oldVersion == 1 && newVersion == 2) {
+		String createNotes = "create table if not exists Notes(task_id integer, date text, notes text, primary key(task_id,date));";
+		db.execSQL(createNotes);
+	    }
+
 	}
     }
 

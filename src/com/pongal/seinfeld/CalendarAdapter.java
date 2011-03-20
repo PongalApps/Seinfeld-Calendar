@@ -20,8 +20,12 @@ public class CalendarAdapter extends BaseAdapter {
 
     Date date;
     Date startDate;
+    private int noOfRows;
     private int count;
-    String[] headers = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    String[] HEADERS = new String[] { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
+    int HEADER_HT = 20;
+    int DATE_CELL_HT = 45;
+
     private Set<CalendarSelectHandler> selectHandler = new HashSet<CalendarSelectHandler>();
     GridView view;
     Task task;
@@ -44,17 +48,18 @@ public class CalendarAdapter extends BaseAdapter {
 	int startDayOfWeek = date.getDayOfWeek();
 	startDate.addDays(1 - startDayOfWeek);
 	int totalDays = date.getMaximumDays();
-	Double noOfRows = Math.ceil(((startDayOfWeek - 1 + totalDays) / 7.0));
-	count = noOfRows.intValue() * 7;
+	noOfRows = new Double(Math.ceil(((startDayOfWeek - 1 + totalDays) / 7.0))).intValue();
+	count = noOfRows * 7;
     }
 
     public void setData(Task task, Date displayMonth) {
 	this.task = task;
-	initializeMonth(displayMonth);
+	setData(displayMonth);
     }
 
     public void setData(Date displayMonth) {
 	initializeMonth(displayMonth);
+	view.getLayoutParams().height = Util.getInDIP(getHeight(), view.getContext());
 	view.invalidateViews();
     }
 
@@ -64,26 +69,30 @@ public class CalendarAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-	return count + headers.length;
+	return count + HEADERS.length;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 	Context context = parent.getContext();
 	TextView textView = (TextView) convertView;
-	if (position < headers.length) {
+	if (position < HEADERS.length) {
 	    return makeDayCell(textView, context, position);
 	} else {
 	    return makeDateCell(textView, context, getModel(position));
 	}
     }
 
+    private int getHeight() {
+	return (DATE_CELL_HT * noOfRows) + HEADER_HT + 15;
+    }
+
     private TextView makeDayCell(TextView view, Context context, int index) {
 	TextView textView = view == null ? new TextView(context) : view;
-	textView.setLayoutParams(new GridView.LayoutParams(-1, Util.getInDIP(36, context)));
+	textView.setLayoutParams(new GridView.LayoutParams(-1, Util.getInDIP(HEADER_HT, context)));
 	textView.setGravity(Gravity.CENTER);
 	textView.setOnClickListener(getDateClickListener());
-	textView.setText(headers[index]);
+	textView.setText(HEADERS[index]);
 	textView.setTag(null);
 	textView.setBackgroundResource(R.color.calHeaderBg);
 	textView.setTextAppearance(textView.getContext(), R.style.calHeader);
@@ -93,7 +102,7 @@ public class CalendarAdapter extends BaseAdapter {
 
     private TextView makeDateCell(TextView view, Context context, DateState model) {
 	TextView textView = view == null ? new TextView(context) : view;
-	textView.setLayoutParams(new GridView.LayoutParams(-1, Util.getInDIP(45, context)));
+	textView.setLayoutParams(new GridView.LayoutParams(-1, Util.getInDIP(DATE_CELL_HT, context)));
 	textView.setGravity(Gravity.CENTER);
 	textView.setOnClickListener(getDateClickListener());
 	textView.setTag(model);
@@ -138,7 +147,7 @@ public class CalendarAdapter extends BaseAdapter {
     }
 
     private DateState getModel(int index) {
-	index = index - headers.length;
+	index = index - HEADERS.length;
 	Date temp = startDate.clone();
 	temp.addDays(index);
 	DateState model = new DateState(temp);
