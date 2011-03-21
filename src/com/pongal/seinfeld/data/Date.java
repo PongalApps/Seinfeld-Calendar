@@ -50,7 +50,7 @@ public class Date implements Cloneable {
     public int getMonth() {
 	return calendar.get(Calendar.MONTH);
     }
-    
+
     public void addMonths(int count) {
 	calendar.add(Calendar.MONTH, count);
     }
@@ -70,7 +70,7 @@ public class Date implements Cloneable {
     public String format(String format) {
 	return new SimpleDateFormat(format).format(calendar.getTime());
     }
-    
+
     public boolean isFutureDate() {
 	Date currentDate = new Date();
 	return calendar.after(currentDate.calendar);
@@ -105,6 +105,12 @@ public class Date implements Cloneable {
 
     public Date clone() {
 	return new Date(getDate());
+    }
+
+    public boolean isYesterday(Date date) {
+	Date yesterday = this.clone();
+	yesterday.addDays(-1);
+	return yesterday.equals(date);
     }
 
 }

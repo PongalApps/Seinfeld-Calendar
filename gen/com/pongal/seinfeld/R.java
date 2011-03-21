@@ -31,7 +31,7 @@ public final class R {
     public static final class id {
         public static final int aboutContent=0x7f08000c;
         public static final int addTask=0x7f080008;
-        public static final int body=0x7f080015;
+        public static final int body=0x7f080016;
         public static final int cal_datesGrid=0x7f080005;
         public static final int cal_monthYr=0x7f080003;
         public static final int cal_nextMonth=0x7f080004;
@@ -39,18 +39,19 @@ public final class R {
         public static final int cal_preMonth=0x7f080002;
         public static final int cal_taskName=0x7f080000;
         public static final int cancelTask=0x7f080009;
-        public static final int deleteTask=0x7f080017;
-        public static final int editTask=0x7f080016;
-        public static final int footer=0x7f080014;
-        public static final int header=0x7f080011;
+        public static final int deleteTask=0x7f080018;
+        public static final int editTask=0x7f080017;
+        public static final int footer=0x7f080015;
+        public static final int header=0x7f080012;
         public static final int imageView1=0x7f08000d;
         public static final int imageView2=0x7f08000e;
         public static final int linearLayout1=0x7f080001;
-        public static final int mainHeading=0x7f080012;
-        public static final int questionImg=0x7f080013;
-        public static final int relativeLayout1=0x7f080010;
+        public static final int mainHeading=0x7f080013;
+        public static final int questionImg=0x7f080014;
+        public static final int relativeLayout1=0x7f080011;
         public static final int splash=0x7f08000b;
         public static final int taskName=0x7f080007;
+        public static final int taskStats=0x7f080010;
         public static final int textView1=0x7f08000f;
         public static final int wrapper=0x7f08000a;
     }

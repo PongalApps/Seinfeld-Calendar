@@ -3,6 +3,7 @@ package com.pongal.seinfeld.task;
 import java.util.Set;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +18,7 @@ public class TaskListView extends LinearLayout {
 
     Context context;
     ImageView questionView;
-    
+
     public TaskListView(final Context context) {
 	super(context);
 	this.context = context;
@@ -42,6 +43,12 @@ public class TaskListView extends LinearLayout {
 	    }
 	    TextView item = (TextView) row.findViewById(R.id.taskName);
 	    item.setText(task.getText());
+	    TextView stats = (TextView) row.findViewById(R.id.taskStats);
+	    if (stats != null) {
+		int[] chainLengths = task.getChainLengths();
+		stats.setText(Html.fromHtml("<i>Current chain : <b>" + chainLengths[0] + "</b>,  Longest chain : <b>"
+			+ chainLengths[1] + "</b></i>"));
+	    }
 	    body.addView(row);
 	}
     }
