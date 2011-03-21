@@ -2,6 +2,7 @@ package com.pongal.seinfeld;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -14,9 +15,10 @@ import android.widget.TextView.OnEditorActionListener;
 import com.pongal.seinfeld.DateState.Status;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
+import com.pongal.seinfeld.homescreen.HomeScreenWidget;
 
 public class CalendarActivity extends Activity {
-    DBManager manager;
+    DBManager dbManager;
     Task task;
     CalendarView calendar;
 
@@ -25,7 +27,7 @@ public class CalendarActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	initDBManager();
 	final int taskId = getIntent().getExtras().getInt("taskId");
-	task = manager.getTaskDetails(taskId);
+	task = dbManager.getTaskDetails(taskId);
 
 	setContentView(R.layout.main);
 	LinearLayout wrapper = (LinearLayout) findViewById(R.id.wrapper);
@@ -42,8 +44,8 @@ public class CalendarActivity extends Activity {
     }
 
     private void initDBManager() {
-	if (manager == null)
-	    manager = new DBManager(getApplicationContext());
+	if (dbManager == null)
+	    dbManager = new DBManager(getApplicationContext());
     }
 
     private OnEditorActionListener getNotesActionListener() {
@@ -51,7 +53,7 @@ public class CalendarActivity extends Activity {
 	    @Override
 	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		if (actionId == EditorInfo.IME_ACTION_DONE) {
-		    manager.updateNotes(task.getId(), calendar.getDisplayedMonth(), v.getText().toString());
+		    dbManager.updateNotes(task.getId(), calendar.getDisplayedMonth(), v.getText().toString());
 		    task.getNotes().put(calendar.getDisplayedMonth(), v.getText().toString());
 		    InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(
 			    Context.INPUT_METHOD_SERVICE);
@@ -69,11 +71,12 @@ public class CalendarActivity extends Activity {
 	    public void onChange(DateState e) {
 		if (e.getStatus() == Status.SELECTED) {
 		    task.addAccomplishedDates(e.getDate());
-		    manager.updateTaskCalendar(task.getId(), e.getDate(), true);
+		    dbManager.updateTaskCalendar(task.getId(), e.getDate(), true);
 		} else {
 		    task.removeAccomplishedDates(e.getDate());
-		    manager.updateTaskCalendar(task.getId(), e.getDate(), false);
+		    dbManager.updateTaskCalendar(task.getId(), e.getDate(), false);
 		}
+		sendBroadcast(new Intent(HomeScreenWidget.ACTION_REFRESH));
 	    }
 	};
     }
@@ -81,7 +84,7 @@ public class CalendarActivity extends Activity {
     @Override
     protected void onDestroy() {
 	super.onDestroy();
-	manager.close();
+	dbManager.close();
     }
 
 }

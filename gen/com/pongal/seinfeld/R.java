@@ -11,10 +11,10 @@ public final class R {
     public static final class attr {
     }
     public static final class color {
-        public static final int calHeaderBg=0x7f060000;
-        public static final int dateBg=0x7f060001;
-        public static final int dateSelectedBg=0x7f060002;
-        public static final int defaultTextColor=0x7f060003;
+        public static final int calHeaderBg=0x7f070000;
+        public static final int dateBg=0x7f070001;
+        public static final int dateSelectedBg=0x7f070002;
+        public static final int defaultTextColor=0x7f070003;
     }
     public static final class drawable {
         public static final int add_black=0x7f020000;
@@ -29,61 +29,68 @@ public final class R {
         public static final int splash=0x7f020009;
     }
     public static final class id {
-        public static final int aboutContent=0x7f08000c;
-        public static final int addTask=0x7f080008;
-        public static final int body=0x7f080016;
-        public static final int cal_datesGrid=0x7f080005;
-        public static final int cal_monthYr=0x7f080003;
-        public static final int cal_nextMonth=0x7f080004;
-        public static final int cal_notes=0x7f080006;
-        public static final int cal_preMonth=0x7f080002;
-        public static final int cal_taskName=0x7f080000;
-        public static final int cancelTask=0x7f080009;
-        public static final int deleteTask=0x7f080018;
-        public static final int editTask=0x7f080017;
-        public static final int footer=0x7f080015;
-        public static final int header=0x7f080012;
-        public static final int imageView1=0x7f08000d;
-        public static final int imageView2=0x7f08000e;
-        public static final int linearLayout1=0x7f080001;
-        public static final int mainHeading=0x7f080013;
-        public static final int questionImg=0x7f080014;
-        public static final int relativeLayout1=0x7f080011;
-        public static final int splash=0x7f08000b;
-        public static final int taskName=0x7f080007;
-        public static final int taskStats=0x7f080010;
-        public static final int textView1=0x7f08000f;
-        public static final int wrapper=0x7f08000a;
+        public static final int aboutContent=0x7f09000f;
+        public static final int addTask=0x7f090008;
+        public static final int body=0x7f090019;
+        public static final int cal_datesGrid=0x7f090005;
+        public static final int cal_monthYr=0x7f090003;
+        public static final int cal_nextMonth=0x7f090004;
+        public static final int cal_notes=0x7f090006;
+        public static final int cal_preMonth=0x7f090002;
+        public static final int cal_taskName=0x7f090000;
+        public static final int cancelTask=0x7f090009;
+        public static final int currentDate=0x7f09000b;
+        public static final int currentDateSelected=0x7f09000a;
+        public static final int deleteTask=0x7f09001b;
+        public static final int editTask=0x7f09001a;
+        public static final int footer=0x7f090018;
+        public static final int header=0x7f090015;
+        public static final int imageView1=0x7f090010;
+        public static final int imageView2=0x7f090011;
+        public static final int linearLayout1=0x7f090001;
+        public static final int mainHeading=0x7f090016;
+        public static final int nextTask=0x7f09000c;
+        public static final int questionImg=0x7f090017;
+        public static final int relativeLayout1=0x7f090014;
+        public static final int splash=0x7f09000e;
+        public static final int taskName=0x7f090007;
+        public static final int taskStats=0x7f090013;
+        public static final int textView1=0x7f090012;
+        public static final int wrapper=0x7f09000d;
     }
     public static final class layout {
         public static final int cal_view=0x7f030000;
         public static final int datebg=0x7f030001;
         public static final int datebg_highlight=0x7f030002;
         public static final int edittask=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int notesbg=0x7f030005;
-        public static final int splashauth_bg=0x7f030006;
-        public static final int splashscreen=0x7f030007;
-        public static final int task=0x7f030008;
-        public static final int taskbg=0x7f030009;
-        public static final int taskbg_highlt=0x7f03000a;
-        public static final int taskdelete=0x7f03000b;
-        public static final int taskedit=0x7f03000c;
-        public static final int taskheaderbg=0x7f03000d;
-        public static final int tasklist=0x7f03000e;
+        public static final int home_widget=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int notesbg=0x7f030006;
+        public static final int splashauth_bg=0x7f030007;
+        public static final int splashscreen=0x7f030008;
+        public static final int task=0x7f030009;
+        public static final int taskbg=0x7f03000a;
+        public static final int taskbg_highlt=0x7f03000b;
+        public static final int taskdelete=0x7f03000c;
+        public static final int taskedit=0x7f03000d;
+        public static final int taskheaderbg=0x7f03000e;
+        public static final int tasklist=0x7f03000f;
     }
     public static final class menu {
-        public static final int taskmenu=0x7f070000;
+        public static final int taskmenu=0x7f080000;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int hello=0x7f040000;
+        public static final int app_name=0x7f050001;
+        public static final int hello=0x7f050000;
     }
     public static final class style {
-        public static final int Theme_NoBackground=0x7f050004;
-        public static final int calField=0x7f050000;
-        public static final int calFieldDisabled=0x7f050002;
-        public static final int calFieldSelected=0x7f050001;
-        public static final int calHeader=0x7f050003;
+        public static final int Theme_NoBackground=0x7f060004;
+        public static final int calField=0x7f060000;
+        public static final int calFieldDisabled=0x7f060002;
+        public static final int calFieldSelected=0x7f060001;
+        public static final int calHeader=0x7f060003;
+    }
+    public static final class xml {
+        public static final int calendar_widget_info=0x7f040000;
     }
 }
