@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
-import com.pongal.seinfeld.homescreen.HomeScreenWidget;
+import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class EditTaskListActivity extends Activity {
 
@@ -38,7 +38,7 @@ public class EditTaskListActivity extends Activity {
 	taskView.clear();
 	Set<Task> tasks = manager.getTasks();
 	taskView.addTasks(tasks, R.layout.taskedit, getEditTaskClickHandler());
-	sendBroadcast(new Intent(HomeScreenWidget.ACTION_REFRESH));
+	sendBroadcast(new Intent(HomeScreenWidgetProvider.ACTION_REFRESH));
     }
 
     private OnClickListener getEditTaskClickHandler() {

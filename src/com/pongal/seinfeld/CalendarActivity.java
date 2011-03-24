@@ -15,7 +15,7 @@ import android.widget.TextView.OnEditorActionListener;
 import com.pongal.seinfeld.DateState.Status;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
-import com.pongal.seinfeld.homescreen.HomeScreenWidget;
+import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class CalendarActivity extends Activity {
     DBManager dbManager;
@@ -42,10 +42,18 @@ public class CalendarActivity extends Activity {
 	calendar.addSelectHandler(getCalendarSelectHandler());
 	calendar.addNotesChangeListener(getNotesActionListener());
     }
+    
+    @Override
+    protected void onResume() {
+	super.onResume();
+	task = dbManager.getTaskDetails(task.getId());
+	calendar.setTask(task);
+    }
 
     private void initDBManager() {
-	if (dbManager == null)
+	if (dbManager == null) {
 	    dbManager = new DBManager(getApplicationContext());
+	}
     }
 
     private OnEditorActionListener getNotesActionListener() {
@@ -76,7 +84,7 @@ public class CalendarActivity extends Activity {
 		    task.removeAccomplishedDates(e.getDate());
 		    dbManager.updateTaskCalendar(task.getId(), e.getDate(), false);
 		}
-		sendBroadcast(new Intent(HomeScreenWidget.ACTION_REFRESH));
+		sendBroadcast(new Intent(HomeScreenWidgetProvider.ACTION_REFRESH));
 	    }
 	};
     }

@@ -84,5 +84,4 @@ public class CalendarView extends LinearLayout {
     public void addNotesChangeListener(OnEditorActionListener notesActionListener) {
 	notes.setOnEditorActionListener(notesActionListener);
     }
-
 }
