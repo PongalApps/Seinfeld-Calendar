@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+
 public final class Task {
     private Integer id;
     private String text;
@@ -87,5 +88,9 @@ public final class Task {
 	Date yesterday = today.clone();
 	yesterday.addDays(-1);
 	return today.equals(date) || yesterday.equals(date);
+    }
+    
+    public boolean isTodayAccomplished() {
+	return isAccomplishedDate(new Date());
     }
 }
