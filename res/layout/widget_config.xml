@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <TextView android:text="Select a task to display in the widget..." android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/textView1" android:padding="5dp"></TextView>
+    <ScrollView android:id="@+id/scrollView1" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/taskList" android:orientation="vertical"></LinearLayout>
+    </ScrollView>
+</LinearLayout>
