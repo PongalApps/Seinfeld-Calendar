@@ -1,0 +1,386 @@
+From f84b4172928ccdb74f80f424b535daa7d6245782 Mon Sep 17 00:00:00 2001
+From: Your Name <you@example.com>
+Date: Wed, 23 Mar 2011 10:53:55 +0530
+Subject: [PATCH] #Alex : Reminder Dialog
+
+---
+ AndroidManifest.xml                                |   11 ++-
+ res/layout/reminder_time.xml                       |   21 +++
+ res/menu/taskmenu.xml                              |    1 +
+ src/com/pongal/seinfeld/db/DBManager.java          |   32 +++++
+ .../pongal/seinfeld/receiver/AlarmReceiver.java    |   42 ++++++
+ .../pongal/seinfeld/receiver/BootupReceiver.java   |   18 +++
+ .../pongal/seinfeld/task/ReminderTimeDialog.java   |  145 ++++++++++++++++++++
+ src/com/pongal/seinfeld/task/TaskActivity.java     |    7 +-
+ 8 files changed, 275 insertions(+), 2 deletions(-)
+ create mode 100644 res/layout/reminder_time.xml
+ create mode 100644 src/com/pongal/seinfeld/receiver/AlarmReceiver.java
+ create mode 100644 src/com/pongal/seinfeld/receiver/BootupReceiver.java
+ create mode 100644 src/com/pongal/seinfeld/task/ReminderTimeDialog.java
+
+diff --git a/AndroidManifest.xml b/AndroidManifest.xml
+index f9f5810..096388a 100644
+--- a/AndroidManifest.xml
++++ b/AndroidManifest.xml
+@@ -39,6 +39,15 @@
+ 			<meta-data android:name="android.appwidget.provider"
+ 				android:resource="@xml/calendar_widget_info" />
+ 		</receiver>
+-
++		<receiver android:name=".receiver.AlarmReceiver"
++			android:enabled="true">
++		</receiver>
++		<receiver android:name=".receiver.BootupReceiver"
++			android:enabled="true">
++			<intent-filter>
++				<action android:name="android.intent.action.BOOT_COMPLETED" />
++				<category android:name="android.intent.category.HOME" />
++			</intent-filter>			
++		</receiver>
+ 	</application>
+ </manifest>
+\ No newline at end of file
+diff --git a/res/layout/reminder_time.xml b/res/layout/reminder_time.xml
+new file mode 100644
+index 0000000..c35c8b0
+--- /dev/null
++++ b/res/layout/reminder_time.xml
+@@ -0,0 +1,21 @@
++<LinearLayout android:id="@+id/ReminderTimeLayout"
++	android:layout_width="fill_parent" android:layout_height="fill_parent"
++	xmlns:android="http://schemas.android.com/apk/res/android"
++	android:orientation="vertical">
++	<TextView android:text="Reminder Time" android:id="@+id/ReminderLabel"
++		android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
++	<TimePicker android:id="@+id/ReminderTimePicker"
++		android:layout_height="wrap_content" android:layout_width="wrap_content"></TimePicker>
++
++	<CheckBox android:text="Enable Reminder" android:id="@+id/EnableReminderCheckBox"
++		android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
++	<LinearLayout android:id="@+id/ReminderTimeButtonLayout"
++		android:layout_width="fill_parent" android:layout_height="fill_parent"
++		xmlns:android="http://schemas.android.com/apk/res/android">
++		<Button android:text="Save" android:id="@+id/ReminderTimeSaveButton"
++			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
++		<Button android:text="Cancel" android:id="@+id/ReminderTimeCancelButton"
++			android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
++	
++	</LinearLayout>
++</LinearLayout>
+diff --git a/res/menu/taskmenu.xml b/res/menu/taskmenu.xml
+index afe62e7..32abd58 100644
+--- a/res/menu/taskmenu.xml
++++ b/res/menu/taskmenu.xml
+@@ -3,4 +3,5 @@
+ 	<item android:id="@+id/addTask" android:title="Add" android:icon="@+drawable/add_black"></item>
+ 	<item android:id="@+id/editTask" android:title="Edit" android:icon="@+drawable/edit_black"></item>
+ 	<item android:id="@+id/deleteTask" android:title="Delete" android:icon="@+drawable/delete_black"></item>
++<item android:id="@+id/reminderTime" android:title="Reminder Time" android:icon="@+drawable/delete_black"></item>
+ </menu>
+diff --git a/src/com/pongal/seinfeld/db/DBManager.java b/src/com/pongal/seinfeld/db/DBManager.java
+index ae509b5..47508b3 100644
+--- a/src/com/pongal/seinfeld/db/DBManager.java
++++ b/src/com/pongal/seinfeld/db/DBManager.java
+@@ -1,5 +1,6 @@
+ package com.pongal.seinfeld.db;
+ 
++import java.text.SimpleDateFormat;
+ import java.util.LinkedHashSet;
+ import java.util.Set;
+ 
+@@ -103,6 +104,34 @@ public class DBManager {
+ 	database.execSQL(deleteQuery, params);
+     }
+ 
++    public String queryReminderTime() {
++	return queryUserSettings("reminder_time");
++    }
++        
++    private String queryUserSettings(String string) {
++	Cursor result = database.rawQuery("select * from UserSettings where setting = ?", new String[] { string });	
++	String value = result.moveToNext() ? result.getString(result.getColumnIndex("value")) : null;
++	result.close();
++	return value;
++    }
++    
++    public void updateReminderTime(int hour, int minute) {
++	updateUserSettings("reminder_time", String.format("?:?", hour, minute));
++    }
++    
++    public void updateUserSettings(String setting, String value) {
++	String[] selector = new String[] { setting };
++	ContentValues values = new ContentValues();
++	values.put("value", value);
++	int updateCnt = database.update("UserSettings", values, "setting = ?", selector);
++	if (updateCnt == 0) {
++	    values.put("setting", setting);
++	    values.put("value", value);
++	    database.insert("UserSettings", null, values);
++	}
++    }
++
++
+     private boolean checkExistence(int taskId, Date date) {
+ 	boolean exists = false;
+ 	String query = "select * from Status where task_id = ? and date = ?";
+@@ -156,6 +185,9 @@ public class DBManager {
+ 	    Log.d(null, "Creating notes table!");
+ 	    String createNotes = "create table if not exists Notes(task_id integer, date text, notes text, primary key(task_id,date));";
+ 	    db.execSQL(createNotes);
++	    
++	    String user_settings = "create table if not exists UserSettings(id integer primary key autoincrement not null, setting text, value text);";
++	    db.execSQL(user_settings);
+ 	}
+     }
+ 
+diff --git a/src/com/pongal/seinfeld/receiver/AlarmReceiver.java b/src/com/pongal/seinfeld/receiver/AlarmReceiver.java
+new file mode 100644
+index 0000000..3abac8c
+--- /dev/null
++++ b/src/com/pongal/seinfeld/receiver/AlarmReceiver.java
+@@ -0,0 +1,42 @@
++package com.pongal.seinfeld.receiver;
++
++import android.app.Activity;
++import android.app.Notification;
++import android.app.NotificationManager;
++import android.app.PendingIntent;
++import android.content.BroadcastReceiver;
++import android.content.Context;
++import android.content.Intent;
++import android.util.Log;
++
++import com.pongal.seinfeld.R;
++import com.pongal.seinfeld.task.TaskActivity;
++
++public class AlarmReceiver extends BroadcastReceiver {
++
++    private int SIMPLE_NOTFICATION_ID;
++
++    @Override
++    public void onReceive(Context context, Intent intent) {
++	Log.d(null, "Received alarm intent");
++	
++	NotificationManager notificationManager = (NotificationManager) context
++		.getSystemService(Activity.NOTIFICATION_SERVICE);
++	
++	Notification notifyDetails = new Notification(R.drawable.icon, "Seinfeld : Task updates",
++		System.currentTimeMillis() + 5000);
++	
++	//Intent notifyingIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.android.com"));
++	Intent notifyingIntent = new Intent(context, TaskActivity.class);
++	//intent.putExtra("taskId", task.getId());
++	PendingIntent myIntent = PendingIntent.getActivity(context, 0, 
++		notifyingIntent, android.content.Intent.FLAG_ACTIVITY_NEW_TASK);
++		
++	notifyDetails.setLatestEventInfo(context, "Seinfeld Calendar Updates", "Click to open the application", myIntent);
++	//notifyDetails.flags |= Notification.FLAG_AUTO_CANCEL;
++
++	notificationManager.notify(SIMPLE_NOTFICATION_ID, notifyDetails);
++	Log.i(getClass().getSimpleName(), "Sucessfully Changed Time");
++    }
++
++}
+diff --git a/src/com/pongal/seinfeld/receiver/BootupReceiver.java b/src/com/pongal/seinfeld/receiver/BootupReceiver.java
+new file mode 100644
+index 0000000..3c4b8b8
+--- /dev/null
++++ b/src/com/pongal/seinfeld/receiver/BootupReceiver.java
+@@ -0,0 +1,18 @@
++package com.pongal.seinfeld.receiver;
++
++import android.content.BroadcastReceiver;
++import android.content.Context;
++import android.content.Intent;
++import android.util.Log;
++
++public class BootupReceiver extends BroadcastReceiver {
++
++    @Override
++    public void onReceive(Context context, Intent intent) {
++	Log.d(null, "Received on bootup");
++	
++	// to call alarm to set time by querying the DB
++    }
++    
++
++}
+diff --git a/src/com/pongal/seinfeld/task/ReminderTimeDialog.java b/src/com/pongal/seinfeld/task/ReminderTimeDialog.java
+new file mode 100644
+index 0000000..83d609e
+--- /dev/null
++++ b/src/com/pongal/seinfeld/task/ReminderTimeDialog.java
+@@ -0,0 +1,145 @@
++package com.pongal.seinfeld.task;
++
++import java.util.Calendar;
++
++import android.app.AlarmManager;
++import android.app.Dialog;
++import android.app.PendingIntent;
++import android.app.Service;
++import android.content.ContentResolver;
++import android.content.Context;
++import android.content.Intent;
++import android.database.Cursor;
++import android.net.Uri;
++import android.os.Bundle;
++import android.util.Log;
++import android.view.View;
++import android.view.ViewGroup.LayoutParams;
++import android.widget.Button;
++import android.widget.CheckBox;
++import android.widget.TimePicker;
++import android.widget.Toast;
++
++import com.pongal.seinfeld.R;
++import com.pongal.seinfeld.db.DBManager;
++import com.pongal.seinfeld.receiver.AlarmReceiver;
++
++public class ReminderTimeDialog extends Dialog {
++
++    public static final int REMINDER_TIME_DIALOG = 1000;
++    CheckBox enableReminderCheckBox;
++    Button saveButton;
++    Button cancelButton;
++    private TimePicker timePicker;
++    private DBManager manager;
++    
++    private void initDBManager() {
++	if (manager == null)
++	    manager = new DBManager(getContext());
++    }
++    
++    int hour;
++    int minute;
++
++    public ReminderTimeDialog(Context context) {
++	super(context);
++	initDBManager(); // To be removed
++    }
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++	super.onCreate(savedInstanceState);
++	setContentView(R.layout.reminder_time);
++	LayoutParams params = getWindow().getAttributes();
++	params.width = LayoutParams.FILL_PARENT;
++	init();
++	
++    }
++
++    public void init() {
++	this.enableReminderCheckBox = (CheckBox) findViewById(R.id.EnableReminderCheckBox);
++	this.saveButton = (Button) findViewById(R.id.ReminderTimeSaveButton);
++	this.cancelButton = (Button) findViewById(R.id.ReminderTimeCancelButton);
++	
++	this.timePicker = (TimePicker) findViewById(R.id.ReminderTimePicker);
++	
++	setReminderTime();
++	
++	setTitle("Set Reminder Time");
++	cancelButton.setOnClickListener(getCancelHandler());
++	saveButton.setOnClickListener(getSaveHandler());
++	saveButton.layout(0, 0, 0, 0);
++    }
++
++    private void setReminderTime() {
++	// to refactor
++	String time = manager.queryReminderTime();
++	String tokens[] = time != null ? time.split(":") : null;
++		
++	if(tokens != null && tokens.length == 2 && isInteger(tokens[0]) && isInteger(tokens[1])) {
++	    this.hour = Integer.parseInt(tokens[0]);
++	    this.minute = Integer.parseInt(tokens[1]);
++	    
++	    this.enableReminderCheckBox.setChecked(true);
++	    this.timePicker.setCurrentHour(this.hour );
++	    this.timePicker.setCurrentMinute(this.minute);
++	} else {
++	    Calendar calTime = Calendar.getInstance();
++	    this.timePicker.setCurrentHour(calTime.get(Calendar.HOUR));
++	    this.timePicker.setCurrentMinute(calTime.get(Calendar.MINUTE));
++	}
++    }
++    
++    private boolean isInteger(String value) {
++	return Integer.getInteger(value) != null;
++    }
++
++    private View.OnClickListener getCancelHandler() {
++	return new View.OnClickListener() {
++	    @Override
++	    public void onClick(View view) {
++		dismiss();
++	    }
++	};
++    }
++
++    private View.OnClickListener getSaveHandler() {
++	return new View.OnClickListener() {
++	    @Override
++	    public void onClick(View view) {
++		Log.d(null, "Save:");
++		ReminderTimeDialog.this.updateTime();
++		Log.d(null, "Save completed:");
++		dismiss();
++	    }
++	};
++    }
++
++    protected void updateTime() {
++	Context context = getContext();
++	AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
++	Intent intent = new Intent(context, AlarmReceiver.class);
++	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 234324243, intent,
++		PendingIntent.FLAG_UPDATE_CURRENT);
++
++	if (enableReminderCheckBox.isChecked()) {
++	    this.minute = this.timePicker.getCurrentMinute();
++	    this.hour = this.timePicker.getCurrentHour();
++
++	    manager.updateReminderTime(hour, minute);
++	    
++	    Calendar cal = Calendar.getInstance();
++	    cal.setTimeInMillis(System.currentTimeMillis());
++	    cal.set(Calendar.HOUR,hour);
++	    cal.set(Calendar.MINUTE, minute);
++	    //alarmManager.setRepeating(AlarmManager.RTC, cal.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
++	    alarmManager.setRepeating(AlarmManager.RTC, cal.getTimeInMillis() + 5000, 5000, pendingIntent);
++
++	    Log.d(null, "running .. (((((((((((((((((((((. TIme Mil : " + cal.getTimeInMillis());
++	    Toast.makeText(context, "Alarm set !!!", Toast.LENGTH_LONG).show();
++	} else {
++	    alarmManager.cancel(pendingIntent);
++	}
++    }
++
++}
+diff --git a/src/com/pongal/seinfeld/task/TaskActivity.java b/src/com/pongal/seinfeld/task/TaskActivity.java
+index 3cc4b68..7d06a85 100644
+--- a/src/com/pongal/seinfeld/task/TaskActivity.java
++++ b/src/com/pongal/seinfeld/task/TaskActivity.java
+@@ -91,6 +91,9 @@ public class TaskActivity extends Activity {
+ 	case R.id.editTask:
+ 	    startActivity(new Intent(TaskActivity.this, EditTaskListActivity.class));
+ 	    break;
++	case R.id.reminderTime:
++	    showDialog(ReminderTimeDialog.REMINDER_TIME_DIALOG);
++	    break;
+ 	}
+ 	return super.onOptionsItemSelected(item);
+     }
+@@ -110,7 +113,9 @@ public class TaskActivity extends Activity {
+     protected Dialog onCreateDialog(int id) {
+ 	switch (id) {
+ 	case EditTaskView.ADD_TASK:
+-	    return new EditTaskView(TaskActivity.this);
++	    return new EditTaskView(TaskActivity.this);	    
++	case ReminderTimeDialog.REMINDER_TIME_DIALOG:
++	    return new ReminderTimeDialog(TaskActivity.this);
+ 	}
+ 	return super.onCreateDialog(id);
+     }
+-- 
+1.7.0.4
+

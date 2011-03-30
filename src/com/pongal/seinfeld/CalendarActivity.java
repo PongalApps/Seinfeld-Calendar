@@ -4,21 +4,26 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.pongal.seinfeld.DateState.Status;
+import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
 import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
+import com.pongal.seinfeld.widget.NotesText;
 
 public class CalendarActivity extends Activity {
     DBManager dbManager;
+
     Task task;
     CalendarView calendar;
 
@@ -42,7 +47,7 @@ public class CalendarActivity extends Activity {
 	calendar.addSelectHandler(getCalendarSelectHandler());
 	calendar.addNotesChangeListener(getNotesActionListener());
     }
-    
+
     @Override
     protected void onResume() {
 	super.onResume();
@@ -61,16 +66,17 @@ public class CalendarActivity extends Activity {
 	    @Override
 	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		if (actionId == EditorInfo.IME_ACTION_DONE) {
-		    dbManager.updateNotes(task.getId(), calendar.getDisplayedMonth(), v.getText().toString());
-		    task.getNotes().put(calendar.getDisplayedMonth(), v.getText().toString());
-		    InputMethodManager inputManager = (InputMethodManager) getApplicationContext().getSystemService(
-			    Context.INPUT_METHOD_SERVICE);
-		    inputManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+		    updateNotes(calendar.getDisplayedMonth(), v.getText().toString());
 		    return true;
 		}
 		return false;
 	    }
 	};
+    }
+
+    private void updateNotes(Date month, String notes) {
+	dbManager.updateNotes(task.getId(), calendar.getDisplayedMonth(), notes);
+	task.getNotes().put(month, notes);
     }
 
     public CalendarSelectHandler getCalendarSelectHandler() {
@@ -93,6 +99,12 @@ public class CalendarActivity extends Activity {
     protected void onDestroy() {
 	super.onDestroy();
 	dbManager.close();
+    }
+
+    @Override
+    public void onBackPressed() {
+	updateNotes(calendar.getDisplayedMonth(), calendar.getNotes());
+	super.onBackPressed();
     }
 
 }

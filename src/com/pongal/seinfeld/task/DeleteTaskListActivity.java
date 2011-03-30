@@ -20,7 +20,7 @@ public class DeleteTaskListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	initDBManager();
-	taskView = new TaskListView(getApplicationContext());
+	taskView = new TaskListView(getApplicationContext(), "Nothing to delete...");
 	setContentView(taskView);
 	refreshTaskList();
     }
@@ -37,7 +37,6 @@ public class DeleteTaskListActivity extends Activity {
     }
 
     private void refreshTaskList() {
-	taskView.clear();
 	Set<Task> tasks = manager.getTasks();
 	taskView.addTasks(tasks, R.layout.taskdelete, getDeleteTaskClickHandler());
     }

@@ -20,4 +20,5 @@
     <color name="dateBg">#FFCAE2FC</color>
     <color name="dateSelectedBg">#FF0291F7</color>
     <color name="defaultTextColor">#FFFFFF</color>
+    <color name="helpTextColor">#7D7C7C</color>
 </resources>

@@ -1,8 +1,12 @@
 package com.pongal.seinfeld;
 
 import android.content.Context;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethod;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -23,9 +27,12 @@ public class CalendarView extends LinearLayout {
     Date displayedMonth;
     Button nextMonthBtn;
     Task task;
+    Context context;
+    OnEditorActionListener notesActionListener;
 
     public CalendarView(Context context) {
 	super(context);
+	this.context = context;
 	LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	init(inflater);
 	taskName = (TextView) findViewById(R.id.cal_taskName);
@@ -33,6 +40,7 @@ public class CalendarView extends LinearLayout {
 	gridView = (GridView) findViewById(R.id.cal_datesGrid);
 	calendarAdapter = new CalendarAdapter(gridView);
 	notes = (EditText) findViewById(R.id.cal_notes);
+
 	Button prevMonth = (Button) findViewById(R.id.cal_preMonth);
 	prevMonth.setOnClickListener(getMonthChangeHandler(-1));
 	nextMonthBtn = (Button) findViewById(R.id.cal_nextMonth);
@@ -71,17 +79,23 @@ public class CalendarView extends LinearLayout {
 		calendarAdapter.setData(displayedMonth);
 		notes.setText(task.getNotes().get(displayedMonth));
 		setNextMonthButtonState();
+		notesActionListener.onEditorAction(notes, EditorInfo.IME_ACTION_DONE, null);
 	    }
 	};
     }
-    
+
     private void setNextMonthButtonState() {
 	Date nextMonth = displayedMonth.clone();
 	nextMonth.addMonths(1);
 	nextMonthBtn.setEnabled(!nextMonth.isFutureDate());
     }
 
-    public void addNotesChangeListener(OnEditorActionListener notesActionListener) {
+    public void addNotesChangeListener(final OnEditorActionListener notesActionListener) {
+	this.notesActionListener = notesActionListener;
 	notes.setOnEditorActionListener(notesActionListener);
+    }
+
+    public String getNotes() {
+	return notes.getText().toString();
     }
 }

@@ -24,7 +24,7 @@ public class EditTaskListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 	initDBManager();
-	taskView = new TaskListView(getApplicationContext());
+	taskView = new TaskListView(getApplicationContext(), "Nothing to edit...");
 	setContentView(taskView);
 	refreshTaskList();
     }
@@ -35,7 +35,6 @@ public class EditTaskListActivity extends Activity {
     }
 
     private void refreshTaskList() {
-	taskView.clear();
 	Set<Task> tasks = manager.getTasks();
 	taskView.addTasks(tasks, R.layout.taskedit, getEditTaskClickHandler());
 	sendBroadcast(new Intent(HomeScreenWidgetProvider.ACTION_REFRESH));

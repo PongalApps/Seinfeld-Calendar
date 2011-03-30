@@ -11,6 +11,7 @@ public final class Task {
     private Integer id;
     private String text;
     private Set<Date> accomplishedDates = new LinkedHashSet<Date>();
+
     private Map<Date, String> notes = new HashMap<Date, String>();
 
     public Task() {
@@ -48,15 +49,15 @@ public final class Task {
     public void removeAccomplishedDates(Date date) {
 	this.accomplishedDates.remove(date);
     }
-
+    
     public void putNote(Date date, String note) {
 	notes.put(date, note);
     }
-
+    
     public Map<Date, String> getNotes() {
 	return notes;
     }
-
+    
     public int[] getChainLengths() {
 	if (accomplishedDates.size() != 0) {
 	    Date yesterday = new Date();

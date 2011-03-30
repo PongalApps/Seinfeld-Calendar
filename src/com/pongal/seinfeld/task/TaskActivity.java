@@ -27,7 +27,7 @@ public class TaskActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
-	taskView = new TaskListView(getApplicationContext());
+	taskView = new TaskListView(getApplicationContext(), "Click the menu button to add tasks...");
 	taskView.addQuestionClickListener(getQuestionIconListener());
 	setContentView(taskView);
 
@@ -45,7 +45,6 @@ public class TaskActivity extends Activity {
     }
 
     private void refreshTaskList() {
-	taskView.clear();
 	Set<Task> tasks = manager.getTasks();
 	taskView.addTasks(tasks, R.layout.task, getTaskClickHandler());
     }

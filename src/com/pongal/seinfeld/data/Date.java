@@ -112,5 +112,4 @@ public class Date implements Cloneable {
 	yesterday.addDays(-1);
 	return yesterday.equals(date);
     }
-
 }

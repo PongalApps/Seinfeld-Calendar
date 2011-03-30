@@ -62,7 +62,6 @@ public class DBManager {
 		String noteStr = notes.getString(1);
 		task.putNote(date, noteStr);
 	    }
-	    
 	    notes.close();
 	}
 	result.close();

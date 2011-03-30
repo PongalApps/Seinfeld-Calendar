@@ -59,7 +59,8 @@ public class EditTaskView extends Dialog {
 	    }
 
 	    public void afterTextChanged(Editable editable) {
-		okButton.setEnabled(!(editable.length() == 0));
+		String text = editable.toString().trim();
+		okButton.setEnabled(!(text.length() == 0));
 	    }
 	});
     }
