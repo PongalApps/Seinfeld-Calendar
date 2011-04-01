@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@layout/taskbg" android:layout_marginBottom="35dp"
-	android:layout_marginTop="35dp" android:layout_marginRight="5dp"
+	android:background="@layout/taskbg" android:layout_marginBottom="5dp"
+	android:layout_marginTop="5dp" android:layout_marginRight="5dp"
 	android:layout_marginLeft="5dp" android:orientation="vertical">
 	<TextView android:id="@+id/taskName" android:text="Problem loading widget"
 		android:textColor="#FFFFFF" android:layout_height="wrap_content"
@@ -13,21 +13,22 @@
 		android:layout_height="fill_parent" android:layout_width="fill_parent"
 		android:gravity="center" android:orientation="vertical">
 
-		<TextView android:id="@+id/currentMonth" android:text=""
+		<!-- <TextView android:id="@+id/currentMonth" android:text=""
 			android:layout_height="wrap_content" android:gravity="center"
 			android:textColor="#FFFFFF" android:textSize="12sp"
 			android:background="@layout/widget_month_bg" android:layout_width="60dp"
-			android:padding="3dp"></TextView>
+			android:padding="3dp"></TextView> -->
 
-		<TextView android:layout_height="50dp" android:id="@+id/currentDateSelected"
-			android:text="" android:layout_width="60dp"
-			android:background="@layout/widget_datebg_highlight" android:gravity="center"
+		<TextView android:layout_height="40dp" android:id="@+id/currentDateSelected"
+			android:text="" android:layout_width="90dp"
+			android:background="@layout/datebg_highlight" android:gravity="center"
 			android:textColor="#FFFFFF" android:textSize="16sp"
-			android:visibility="gone"></TextView>
-		<TextView android:layout_height="50dp" android:id="@+id/currentDate"
-			android:text="" android:layout_width="60dp" android:background="@layout/widget_date_bg"
+			android:visibility="gone" />
+			
+		<TextView android:layout_height="40dp" android:id="@+id/currentDate"
+			android:text="" android:layout_width="90dp" android:background="@layout/datebg"
 			android:gravity="center" android:textColor="#FFFFFF"
-			android:textSize="16sp"></TextView>
+			android:textSize="16sp" />
 	</LinearLayout>
 
 </LinearLayout>

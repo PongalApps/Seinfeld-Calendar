@@ -1,15 +1,9 @@
 package com.pongal.seinfeld;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -19,8 +13,6 @@ import com.pongal.seinfeld.DateState.Status;
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
-import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
-import com.pongal.seinfeld.widget.NotesText;
 
 public class CalendarActivity extends Activity {
     DBManager dbManager;

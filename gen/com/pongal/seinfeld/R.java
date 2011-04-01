@@ -30,9 +30,9 @@ public final class R {
         public static final int splash=0x7f020009;
     }
     public static final class id {
-        public static final int aboutContent=0x7f090011;
+        public static final int aboutContent=0x7f090010;
         public static final int addTask=0x7f09000a;
-        public static final int body=0x7f09001b;
+        public static final int body=0x7f09001a;
         public static final int cal_datesGrid=0x7f090007;
         public static final int cal_monthYr=0x7f090005;
         public static final int cal_nextMonth=0x7f090006;
@@ -40,29 +40,28 @@ public final class R {
         public static final int cal_preMonth=0x7f090004;
         public static final int cal_taskName=0x7f090002;
         public static final int cancelTask=0x7f09000b;
-        public static final int currentDate=0x7f09000e;
-        public static final int currentDateSelected=0x7f09000d;
-        public static final int currentMonth=0x7f09000c;
-        public static final int deleteTask=0x7f090020;
-        public static final int editTask=0x7f09001f;
-        public static final int footer=0x7f09001a;
-        public static final int header=0x7f090017;
-        public static final int imageView1=0x7f090012;
-        public static final int imageView2=0x7f090013;
+        public static final int currentDate=0x7f09000d;
+        public static final int currentDateSelected=0x7f09000c;
+        public static final int deleteTask=0x7f09001f;
+        public static final int editTask=0x7f09001e;
+        public static final int footer=0x7f090019;
+        public static final int header=0x7f090016;
+        public static final int imageView1=0x7f090011;
+        public static final int imageView2=0x7f090012;
         public static final int linearLayout1=0x7f090003;
         public static final int linearLayout2=0x7f090001;
-        public static final int mainHeading=0x7f090018;
-        public static final int menuHelpTxt=0x7f09001c;
-        public static final int questionImg=0x7f090019;
-        public static final int relativeLayout1=0x7f090016;
+        public static final int mainHeading=0x7f090017;
+        public static final int menuHelpTxt=0x7f09001b;
+        public static final int questionImg=0x7f090018;
+        public static final int relativeLayout1=0x7f090015;
         public static final int scrollView1=0x7f090000;
-        public static final int splash=0x7f090010;
-        public static final int taskList=0x7f09001e;
+        public static final int splash=0x7f09000f;
+        public static final int taskList=0x7f09001d;
         public static final int taskName=0x7f090009;
-        public static final int taskStats=0x7f090015;
-        public static final int textView1=0x7f090014;
-        public static final int widgetInstr=0x7f09001d;
-        public static final int wrapper=0x7f09000f;
+        public static final int taskStats=0x7f090014;
+        public static final int textView1=0x7f090013;
+        public static final int widgetInstr=0x7f09001c;
+        public static final int wrapper=0x7f09000e;
     }
     public static final class layout {
         public static final int cal_view=0x7f030000;

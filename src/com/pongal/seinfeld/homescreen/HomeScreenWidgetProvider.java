@@ -161,9 +161,13 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	Date today = new Date();
 	RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.home_widget);
 	view.setTextViewText(R.id.taskName, taskSnip.taskName);
-	int selectedId = taskSnip.doneToday ? R.id.currentDateSelected : R.id.currentDate;
-	view.setTextViewText(selectedId, today.getDay() + "");
-	view.setTextViewText(R.id.currentMonth, today.format("MMM"));
+	// view.setTextViewText(R.id.currentMonth, today.format("MMM"));	
+	final int selectedId = taskSnip.doneToday ? R.id.currentDateSelected : R.id.currentDate;	
+	view.setTextViewText(selectedId, today.format("MMM").toUpperCase() + "  " + today.getDay());	
+	
+	Log.d("seinfeld", "CDate: " + (R.id.currentDate == selectedId));
+	Log.d("seinfeld", "CDateSelected: " + (R.id.currentDateSelected == selectedId));
+	
 	view.setViewVisibility(R.id.currentDate, R.id.currentDate == selectedId ? View.VISIBLE : View.GONE);
 	view.setViewVisibility(R.id.currentDateSelected, R.id.currentDateSelected == selectedId ? View.VISIBLE : View.GONE);
 	return view;
