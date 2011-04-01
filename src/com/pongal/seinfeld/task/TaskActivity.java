@@ -1,10 +1,13 @@
 package com.pongal.seinfeld.task;
 
+import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +21,7 @@ import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.SplashScreenActivity;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
+import com.pongal.seinfeld.homescreen.WidgetConfiguration;
 
 public class TaskActivity extends Activity {
 
@@ -35,7 +39,6 @@ public class TaskActivity extends Activity {
 	refreshTaskList();
 	
 	Log.d(null, "Density: " + getResources().getDisplayMetrics().densityDpi);
-
     }
 
     @Override

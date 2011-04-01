@@ -1,26 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:background="@layout/taskbg" android:padding="5dp"
-	android:layout_marginBottom="15dp" android:layout_marginTop="15dp">
-	<TextView android:layout_width="wrap_content"
-		android:layout_weight="1" android:id="@+id/taskName" android:text="Task Name"
-		android:layout_height="fill_parent" android:gravity="center_vertical"
-		android:textColor="#FFFFFF"></TextView>
-	<LinearLayout android:layout_height="fill_parent"
-		android:id="@+id/linearLayout1" android:layout_width="wrap_content">
+	android:background="@layout/taskbg" android:layout_marginBottom="35dp"
+	android:layout_marginTop="35dp" android:layout_marginRight="5dp"
+	android:layout_marginLeft="5dp" android:orientation="vertical">
+	<TextView android:id="@+id/taskName" android:text="Problem loading widget"
+		android:textColor="#FFFFFF" android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:gravity="center"
+		android:padding="5dp" android:textSize="12sp" android:background="@layout/taskbg"
+		android:ellipsize="end" android:maxLines="2"></TextView>
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_height="fill_parent" android:layout_width="fill_parent"
+		android:gravity="center" android:orientation="vertical">
+
+		<TextView android:id="@+id/currentMonth" android:text=""
+			android:layout_height="wrap_content" android:gravity="center"
+			android:textColor="#FFFFFF" android:textSize="12sp"
+			android:background="@layout/widget_month_bg" android:layout_width="60dp"
+			android:padding="3dp"></TextView>
+
 		<TextView android:layout_height="50dp" android:id="@+id/currentDateSelected"
-			android:text="Current Date" android:layout_width="50dp"
-			android:gravity="center" android:layout_gravity="center_vertical"
-			android:background="@layout/datebg_highlight" android:textColor="#FFFFFF"
-			android:textSize="12sp"></TextView>
+			android:text="" android:layout_width="60dp"
+			android:background="@layout/widget_datebg_highlight" android:gravity="center"
+			android:textColor="#FFFFFF" android:textSize="16sp"
+			android:visibility="gone"></TextView>
 		<TextView android:layout_height="50dp" android:id="@+id/currentDate"
-			android:text="Current Date" android:layout_width="50dp"
-			android:gravity="center" android:layout_gravity="center_vertical"
-			android:background="@layout/datebg" android:textColor="#FFFFFF"
-			android:textSize="12sp"></TextView>
+			android:text="" android:layout_width="60dp" android:background="@layout/widget_date_bg"
+			android:gravity="center" android:textColor="#FFFFFF"
+			android:textSize="16sp"></TextView>
 	</LinearLayout>
-	<Button android:layout_width="wrap_content" android:id="@+id/nextTask"
-		android:text="&gt;" android:layout_height="fill_parent"
-		android:gravity="center_vertical"></Button>
+
 </LinearLayout>

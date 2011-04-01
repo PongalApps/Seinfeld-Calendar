@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.pongal.seinfeld.R;
+import com.pongal.seinfeld.Util;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
 import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
@@ -76,6 +77,7 @@ public class EditTaskListActivity extends Activity {
 		manager.updateTask(task);
 		refreshTaskList();
 		dismissDialog(dialogType);
+		sendBroadcast(Util.getBroadcastRefresh(task));
 	    }
 	};
     }

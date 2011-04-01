@@ -3,6 +3,7 @@ package com.pongal.seinfeld;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -90,10 +91,11 @@ public class CalendarActivity extends Activity {
 		    task.removeAccomplishedDates(e.getDate());
 		    dbManager.updateTaskCalendar(task.getId(), e.getDate(), false);
 		}
-		sendBroadcast(new Intent(HomeScreenWidgetProvider.ACTION_REFRESH));
+		sendBroadcast(Util.getBroadcastRefresh(task));
 	    }
 	};
     }
+
 
     @Override
     protected void onDestroy() {
