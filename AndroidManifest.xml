@@ -49,6 +49,7 @@
 				<action android:name="com.seinfeld.action.homeScreenRefresh" />
 				<action android:name="com.seinfeld.action.homeScreenSelectDate" />
 				<action android:name="com.seinfeld.action.homeScreenDeselectDate" />
+				<action android:name="com.seinfeld.action.homeScreenUpdateDate" />
 				<data android:scheme="seinfeldcal" />
 			</intent-filter>
 			<meta-data android:name="android.appwidget.provider"

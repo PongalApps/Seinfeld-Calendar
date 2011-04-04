@@ -26,6 +26,7 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_SELECT = "com.seinfeld.action.homeScreenSelectDate";
     public static final String ACTION_DESELECT = "com.seinfeld.action.homeScreenDeselectDate";
     public static final String ACTION_NEXT_TASK = "com.seinfeld.action.homeScreenNextTask";
+    public static final String ACTION_UPDATE_DATE = "com.seinfeld.action.homeScreenUpdateDate";
     public static final String URI_SCHEME = "seinfeldcal";
 
     public static final String WIDGET_ID = "widget_id";
@@ -44,10 +45,9 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	Log.d("seinfeld", "onReceive: " + actionText);
 
 	if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(actionText)) {
-	    final int appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-	    refreshWidget(context, appWidgetId);
-	}
-	else if (ACTION_REFRESH.equals(actionText)) {
+	    final int[] appWidgetId = intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+	    refreshWidget(context, appWidgetId[0]);
+	} else if (ACTION_REFRESH.equals(actionText)) {
 	    int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(
 		    new ComponentName(context, HomeScreenWidgetProvider.class));
 	    Bundle bundle = intent.getExtras();
@@ -69,17 +69,21 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	    // TODO: Iterate all widgets and update those with task id 'taskId'
 	    refreshWidget(context, appWidgetId);
 	    dbManager.close();
+	} else if (ACTION_UPDATE_DATE.equals(actionText)) {
+	    final int appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+	    updateSharedPrefs(context, appWidgetId, false); //Clear done flag for the next day
+	    refreshWidget(context, appWidgetId);
 	} else {
 	    super.onReceive(context, intent);
 	}
     }
-    
+
     @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {        
-        super.onDeleted(context, appWidgetIds);
-        for (int widgetId : appWidgetIds) {            
-            deleteWidgetPrefs(context, widgetId);
-        }
+    public void onDeleted(Context context, int[] appWidgetIds) {
+	super.onDeleted(context, appWidgetIds);
+	for (int widgetId : appWidgetIds) {
+	    deleteWidgetPrefs(context, widgetId);
+	}
     }
 
     private static PendingIntent getPendingIntent(Context context, int appWidgetId, TaskSnippet taskSnip) {
@@ -121,7 +125,7 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	editor.putBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), taskDone);
 	editor.commit();
     }
-    
+
     private void deleteWidgetPrefs(Context context, int widgetId) {
 	final String taskIdPrefName = String.format(WidgetConfiguration.TASK_ID_SHR, widgetId);
 	final String taskNamePrefName = String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId);
@@ -161,15 +165,16 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	Date today = new Date();
 	RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.home_widget);
 	view.setTextViewText(R.id.taskName, taskSnip.taskName);
-	// view.setTextViewText(R.id.currentMonth, today.format("MMM"));	
-	final int selectedId = taskSnip.doneToday ? R.id.currentDateSelected : R.id.currentDate;	
-	view.setTextViewText(selectedId, today.format("MMM").toUpperCase() + "  " + today.getDay());	
-	
+	// view.setTextViewText(R.id.currentMonth, today.format("MMM"));
+	final int selectedId = taskSnip.doneToday ? R.id.currentDateSelected : R.id.currentDate;
+	view.setTextViewText(selectedId, today.format("MMM").toUpperCase() + "  " + today.getDay());
+
 	Log.d("seinfeld", "CDate: " + (R.id.currentDate == selectedId));
 	Log.d("seinfeld", "CDateSelected: " + (R.id.currentDateSelected == selectedId));
-	
+
 	view.setViewVisibility(R.id.currentDate, R.id.currentDate == selectedId ? View.VISIBLE : View.GONE);
-	view.setViewVisibility(R.id.currentDateSelected, R.id.currentDateSelected == selectedId ? View.VISIBLE : View.GONE);
+	view.setViewVisibility(R.id.currentDateSelected, R.id.currentDateSelected == selectedId ? View.VISIBLE
+		: View.GONE);
 	return view;
     }
 
