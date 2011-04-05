@@ -2,6 +2,7 @@ package com.pongal.seinfeld;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -13,6 +14,7 @@ import com.pongal.seinfeld.DateState.Status;
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
+import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class CalendarActivity extends Activity {
     DBManager dbManager;
@@ -58,6 +60,7 @@ public class CalendarActivity extends Activity {
 	return new OnEditorActionListener() {
 	    @Override
 	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		Log.d("seinfeld", (actionId == EditorInfo.IME_ACTION_DONE) + "");
 		if (actionId == EditorInfo.IME_ACTION_DONE) {
 		    updateNotes(calendar.getDisplayedMonth(), v.getText().toString());
 		    return true;
@@ -83,7 +86,7 @@ public class CalendarActivity extends Activity {
 		    task.removeAccomplishedDates(e.getDate());
 		    dbManager.updateTaskCalendar(task.getId(), e.getDate(), false);
 		}
-		sendBroadcast(Util.getBroadcastRefresh(task));
+		sendBroadcast(Util.getBroadcast(task, HomeScreenWidgetProvider.ACTION_REFRESH));
 	    }
 	};
     }

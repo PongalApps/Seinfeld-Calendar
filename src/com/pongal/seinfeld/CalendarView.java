@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -37,11 +38,13 @@ public class CalendarView extends LinearLayout {
 	gridView = (GridView) findViewById(R.id.cal_datesGrid);
 	calendarAdapter = new CalendarAdapter(gridView);
 	notes = (EditText) findViewById(R.id.cal_notes);
-
 	Button prevMonth = (Button) findViewById(R.id.cal_preMonth);
 	prevMonth.setOnClickListener(getMonthChangeHandler(-1));
 	nextMonthBtn = (Button) findViewById(R.id.cal_nextMonth);
 	nextMonthBtn.setOnClickListener(getMonthChangeHandler(1));
+
+	InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+	inputManager.hideSoftInputFromWindow(notes.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
     public void setTask(Task aTask) {

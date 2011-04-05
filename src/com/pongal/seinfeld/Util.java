@@ -15,9 +15,8 @@ public class Util {
 		.getDisplayMetrics());
     }
 
-    public static Intent getBroadcastRefresh(Task t) {
-	Intent intent = new Intent(HomeScreenWidgetProvider.ACTION_REFRESH);
-	intent.setAction(HomeScreenWidgetProvider.ACTION_REFRESH);
+    public static Intent getBroadcast(Task t, String action) {
+	Intent intent = new Intent(action);
 	intent.putExtra(HomeScreenWidgetProvider.TASK_ID, t.getId());
 	intent.putExtra(HomeScreenWidgetProvider.TASK_NAME, t.getText());
 	intent.putExtra(HomeScreenWidgetProvider.TASK_MARKED, t.isTodayAccomplished());

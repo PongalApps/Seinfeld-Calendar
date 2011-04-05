@@ -77,7 +77,7 @@ public class EditTaskListActivity extends Activity {
 		manager.updateTask(task);
 		refreshTaskList();
 		dismissDialog(dialogType);
-		sendBroadcast(Util.getBroadcastRefresh(task));
+		sendBroadcast(Util.getBroadcast(task, HomeScreenWidgetProvider.ACTION_REFRESH));
 	    }
 	};
     }

@@ -1,8 +1,6 @@
 package com.pongal.seinfeld.homescreen;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,8 +13,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -109,7 +105,6 @@ public class WidgetConfiguration extends Activity {
 	    public void onClick(View v) {
 		final Context context = getApplicationContext();
 		final Task task = (Task) v.getTag();
-		Log.d(HomeScreenWidgetProvider.AppNameTag, "Updating shared prefs for widget id: " + appWidgetId);
 		updateSharedPrefs(appWidgetId, task);
 		HomeScreenWidgetProvider.refreshWidget(context, appWidgetId);
 		setDateChangeIntent();
@@ -139,7 +134,6 @@ public class WidgetConfiguration extends Activity {
 	AlarmManager alarms = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 	alarms.cancel(datePendingIntent);
 	alarms.setRepeating(AlarmManager.RTC, getTimeForMidnight(), AlarmManager.INTERVAL_DAY, datePendingIntent);
-//	alarms.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(),  5000, datePendingIntent);
     }
 
     private long getTimeForMidnight() {
@@ -149,7 +143,6 @@ public class WidgetConfiguration extends Activity {
 	midnight.set(Calendar.MINUTE, 0);
 	midnight.set(Calendar.SECOND, 0);
 	midnight.set(Calendar.MILLISECOND, 0);
-	Log.d("seinfeld","Date: " + SimpleDateFormat.getInstance().format(midnight.getTime()));
 	return midnight.getTimeInMillis();
     }
 

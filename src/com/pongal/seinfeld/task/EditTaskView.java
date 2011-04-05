@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -79,7 +78,6 @@ public class EditTaskView extends Dialog {
 	    @Override
 	    public void onClick(View view) {
 		if (!taskName.getText().equals(task.getText())) {
-		    Log.d(null, "Task id:" + task.getId());
 		    task.setText(taskName.getText().toString());
 		    handler.onUpdate(task);
 		}

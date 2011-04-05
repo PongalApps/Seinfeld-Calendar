@@ -8,7 +8,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
@@ -145,7 +144,6 @@ public class DBManager {
 	}
 
 	private void v1Changes(SQLiteDatabase db) {
-	    Log.d(null, "Creating first set of table!");
 	    String createTaskTable = "create table if not exists Task (id integer primary key autoincrement not null, name text);";
 	    db.execSQL(createTaskTable);
 
@@ -154,7 +152,6 @@ public class DBManager {
 	}
 
 	private void v2Changes(SQLiteDatabase db) {
-	    Log.d(null, "Creating notes table!");
 	    String createNotes = "create table if not exists Notes(task_id integer, date text, notes text, primary key(task_id,date));";
 	    db.execSQL(createNotes);
 	}
