@@ -105,12 +105,13 @@ public class WidgetConfiguration extends Activity {
 	    public void onClick(View v) {
 		final Context context = getApplicationContext();
 		final Task task = (Task) v.getTag();
-		updateSharedPrefs(appWidgetId, task);
+		
 		HomeScreenWidgetProvider.refreshWidget(context, appWidgetId);
-		setDateChangeIntent();
+		setDateChangeIntent();		
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		setResult(RESULT_OK, resultValue);
+		updateSharedPrefs(appWidgetId, task);
 		finish();
 	    }
 	};
@@ -133,9 +134,9 @@ public class WidgetConfiguration extends Activity {
 	
 	AlarmManager alarms = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 	alarms.cancel(datePendingIntent);
-	alarms.setRepeating(AlarmManager.RTC, getTimeForMidnight(), AlarmManager.INTERVAL_DAY, datePendingIntent);
-    }
-
+	alarms.setRepeating(AlarmManager.RTC, getTimeForMidnight(), AlarmManager.INTERVAL_DAY, datePendingIntent);	
+    }    
+    
     private long getTimeForMidnight() {
 	Calendar midnight = Calendar.getInstance();
 	midnight.add(Calendar.DATE, 1);

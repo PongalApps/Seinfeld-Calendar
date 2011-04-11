@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent" android:padding="10sp" android:orientation="vertical">
-    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/taskName" android:text="EditText" android:singleLine="true"></EditText>
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <Button android:text="Add" android:id="@+id/addTask" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></Button>
-        <Button android:text="Cancel" android:id="@+id/cancelTask" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1"></Button>
-    </LinearLayout>
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:padding="10sp" android:orientation="vertical">
+	<EditText android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:id="@+id/taskName"
+		android:text="EditText" android:singleLine="true"></EditText>
+	<LinearLayout android:layout_width="fill_parent"
+		android:id="@+id/linearLayout2" android:layout_weight="1"
+		android:layout_height="wrap_content" android:orientation="vertical"
+		android:layout_marginBottom="5dp">
+		<CheckBox android:layout_width="wrap_content" android:id="@+id/setReminder"
+			android:layout_height="wrap_content" android:text="Set Reminder"
+			android:layout_marginLeft="50dp"></CheckBox>
+		<TimePicker android:clickable="false" android:id="@+id/timePicker"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginLeft="50dp"
+			android:visibility="gone"></TimePicker>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/linearLayout1"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:layout_gravity="bottom" android:layout_marginTop="10dp">
+		<Button android:text="Add" android:id="@+id/addTask"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1"></Button>
+		<Button android:text="Cancel" android:id="@+id/cancelTask"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1"></Button>
+	</LinearLayout>
 </LinearLayout>

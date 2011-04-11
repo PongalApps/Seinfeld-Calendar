@@ -1,15 +1,18 @@
 package com.pongal.seinfeld.task;
 
+import java.util.Calendar;
 import java.util.Set;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.pongal.seinfeld.R;
+import com.pongal.seinfeld.ReminderTimeService;
 import com.pongal.seinfeld.Util;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
@@ -19,7 +22,7 @@ public class EditTaskListActivity extends Activity {
 
     private TaskListView taskView;
     private Task selectedTask;
-    DBManager manager;
+    DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,12 +34,12 @@ public class EditTaskListActivity extends Activity {
     }
 
     private void initDBManager() {
-	if (manager == null)
-	    manager = new DBManager(getApplicationContext());
+	if (dbManager == null)
+	    dbManager = new DBManager(getApplicationContext());
     }
 
     private void refreshTaskList() {
-	Set<Task> tasks = manager.getTasks();
+	Set<Task> tasks = dbManager.getTasks();
 	taskView.addTasks(tasks, R.layout.taskedit, getEditTaskClickHandler());
 	sendBroadcast(new Intent(HomeScreenWidgetProvider.ACTION_REFRESH));
     }
@@ -69,17 +72,30 @@ public class EditTaskListActivity extends Activity {
 	}
 	super.onPrepareDialog(id, dialog);
     }
+    
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
+	dbManager.close();
+    }
 
     private TaskUpdatedHandler getSaveTaskHandler(final int dialogType) {
 	return new TaskUpdatedHandler() {
 	    @Override
 	    public void onUpdate(Task task) {
-		manager.updateTask(task);
+		dbManager.updateTask(task);
 		refreshTaskList();
+		
+		ReminderTimeService rtService = new ReminderTimeService(getApplicationContext());
+		if (task.isReminderSet()) {
+		    rtService.setReminder(task);
+		} else {
+		    rtService.cancelReminder(task);
+		}
+		
 		dismissDialog(dialogType);
 		sendBroadcast(Util.getBroadcast(task, HomeScreenWidgetProvider.ACTION_REFRESH));
 	    }
 	};
     }
-
 }

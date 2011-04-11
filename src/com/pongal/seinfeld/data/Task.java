@@ -6,13 +6,12 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-
 public final class Task {
     private Integer id;
     private String text;
     private Set<Date> accomplishedDates = new LinkedHashSet<Date>();
-
     private Map<Date, String> notes = new HashMap<Date, String>();
+    private java.util.Date reminderTime;
 
     public Task() {
     }
@@ -34,6 +33,18 @@ public final class Task {
 	this.text = text;
     }
 
+    public boolean isReminderSet() {
+	return reminderTime != null;
+    }
+    
+    public java.util.Date getReminderTime() {
+	return reminderTime;
+    }
+
+    public void setReminderTime(java.util.Date reminderTime) {
+	this.reminderTime = reminderTime;
+    }
+
     public int getAccomplishedDatesCount() {
 	return accomplishedDates.size();
     }
@@ -49,15 +60,15 @@ public final class Task {
     public void removeAccomplishedDates(Date date) {
 	this.accomplishedDates.remove(date);
     }
-    
+
     public void putNote(Date date, String note) {
 	notes.put(date, note);
     }
-    
+
     public Map<Date, String> getNotes() {
 	return notes;
     }
-    
+
     public int[] getChainLengths() {
 	if (accomplishedDates.size() != 0) {
 	    Date yesterday = new Date();
@@ -77,7 +88,7 @@ public final class Task {
 		}
 		curChainLen = isTodayOrYesterday(currDate) ? itrChainLen : 0;
 		prevDate = currDate;
-		
+
 	    } while (itr.hasNext());
 	    return new int[] {curChainLen, maxChainLen};
 	}
@@ -90,7 +101,7 @@ public final class Task {
 	yesterday.addDays(-1);
 	return today.equals(date) || yesterday.equals(date);
     }
-    
+
     public boolean isTodayAccomplished() {
 	return isAccomplishedDate(new Date());
     }

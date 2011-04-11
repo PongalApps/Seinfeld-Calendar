@@ -16,7 +16,7 @@ import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 public class DeleteTaskListActivity extends Activity {
 
     private TaskListView taskView;
-    DBManager manager;
+    DBManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +26,19 @@ public class DeleteTaskListActivity extends Activity {
 	setContentView(taskView);
 	refreshTaskList();
     }
+    
+    @Override
+    protected void onDestroy() {
+	super.onDestroy();
+	dbManager.close();
+    }
 
     private OnClickListener getDeleteTaskClickHandler() {
 	return new OnClickListener() {
 	    @Override
 	    public void onClick(View taskView) {
 		Task task = (Task) taskView.getTag();
-		manager.deleteTask(task);
+		dbManager.deleteTask(task);
 		refreshTaskList();
 		sendBroadcast(Util.getBroadcast(task, HomeScreenWidgetProvider.ACTION_DELETE));
 	    }
@@ -40,13 +46,13 @@ public class DeleteTaskListActivity extends Activity {
     }
 
     private void refreshTaskList() {
-	Set<Task> tasks = manager.getTasks();
+	Set<Task> tasks = dbManager.getTasks();
 	taskView.addTasks(tasks, R.layout.taskdelete, getDeleteTaskClickHandler());
     }
 
     private void initDBManager() {
-	if (manager == null)
-	    manager = new DBManager(getApplicationContext());
+	if (dbManager == null)
+	    dbManager = new DBManager(getApplicationContext());
     }
 
 }

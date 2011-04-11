@@ -55,5 +55,15 @@
 			<meta-data android:name="android.appwidget.provider"
 				android:resource="@xml/calendar_widget_info" />
 		</receiver>
+		
+		<receiver android:name=".AlarmReceiver" android:enabled="true" />      
+      <receiver android:name=".BootupReceiver" android:enabled="true">
+         <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" />
+            <category android:name="android.intent.category.HOME" />
+         </intent-filter>        
+      </receiver>
+      
+      <uses-permission android:name="android.permission.VIBRATE" />
 	</application>
 </manifest>

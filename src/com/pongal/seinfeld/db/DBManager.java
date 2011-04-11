@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
@@ -30,13 +31,18 @@ public class DBManager {
     public void createTask(String text) {
 	database.execSQL("insert into task(name) values (?)", new String[] { text });
     }
+    
+    public void createTask(String taskName, java.util.Date reminderTime) {
+	final String milliSecondsText = reminderTime == null ? "" : String.valueOf(reminderTime.getTime());
+	Log.d("seinfeld", "Create Task: " + String.format("insert into task(name, reminder) values (%s, %s)", taskName, milliSecondsText));
+	database.execSQL("insert into task(name, reminder) values (?, ?)", new String[] { taskName, milliSecondsText });
+    }
 
     public Set<Task> getTasks() {
 	Set<Task> tasks = new LinkedHashSet<Task>();
 	Cursor result = database.rawQuery("select * from Task", null);
 	while (result.moveToNext()) {
 	    tasks.add(getTaskDetails(result.getInt(0)));
-	    // tasks.add(new Task(result.getInt(0), result.getString(1)));
 	}
 	result.close();
 	return tasks;
@@ -48,6 +54,15 @@ public class DBManager {
 	Cursor result = database.rawQuery("select * from Task where id = ?", taskIds);
 	while (result.moveToNext()) {
 	    task = new Task(result.getInt(0), result.getString(1));
+	    
+	    final String reminderTimeText = result.getString(2);
+	    Log.d("seinfeld", "Reminder: " + reminderTimeText);
+	    if (reminderTimeText != null && reminderTimeText.length() != 0) {
+		Log.d("seinfeld", "Task: " + task.getText() + "..." + reminderTimeText);
+		long reminderTimeMilliSecs = Long.parseLong(reminderTimeText, 10);
+		task.setReminderTime(new java.util.Date(reminderTimeMilliSecs));
+	    }
+	    
 	    Cursor dates = database.rawQuery("select date from Status where task_id = ? order by date", taskIds);
 	    while (dates.moveToNext()) {
 		Date date = new Date(dates.getString(0));
@@ -78,9 +93,22 @@ public class DBManager {
 	}
     }
 
-    public void updateTask(Task task) {
-	String insertOrUpdateQuery = "insert or replace into task(id, name) values (?, ?);";
-	database.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText() });
+    public int updateTask(Task task) {
+	final java.util.Date reminderTime = task.getReminderTime();
+	final String milliSecondsText = reminderTime == null ? "" : String.valueOf(reminderTime.getTime());
+	
+	final String formatSpec = "insert or replace into task(id, name, reminder) values (%s, %s, %s)";
+	Log.d("seinfeld", "updateTask: " + String.format(formatSpec, task.getId(), task.getText(), milliSecondsText));
+	
+	String insertOrUpdateQuery = "insert or replace into task(id, name, reminder) values (?, ?, ?);";
+	database.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText(), milliSecondsText });
+	
+	Cursor taskIds = database.rawQuery("select id from task where name = ?", new String[] { task.getText() });
+	taskIds.moveToNext();
+	final int taskId = taskIds.getInt(0);
+	taskIds.close();
+	
+	return taskId;
     }
 
     public void updateNotes(int taskId, Date date, String notes) {
@@ -102,6 +130,34 @@ public class DBManager {
 	String deleteQuery = "delete from task where id= ?";
 	database.execSQL(deleteQuery, params);
     }
+    
+    public String queryReminderTime() {
+	return queryUserSettings("reminder_time");
+    }
+
+    private String queryUserSettings(String string) {
+	/*Cursor result = database.rawQuery("select * from UserSettings where setting = ?", new String[] { string });	
+	String value = result.moveToNext() ? result.getString(result.getColumnIndex("value")) : null;
+	result.close();
+	return value;*/
+	return "09:00";
+    }
+
+    public void updateReminderTime(String time) {
+	updateUserSettings("reminder_time", time);
+    }
+
+    public void updateUserSettings(String setting, String value) {
+	/*String[] selector = new String[] { setting };
+	ContentValues values = new ContentValues();
+	values.put("value", value);
+	int updateCnt = database.update("UserSettings", values, "setting = ?", selector);
+	if (updateCnt == 0) {
+	    values.put("setting", setting);
+	    values.put("value", value);
+	    database.insert("UserSettings", null, values);
+	}*/
+    }
 
     private boolean checkExistence(int taskId, Date date) {
 	boolean exists = false;
@@ -116,7 +172,7 @@ public class DBManager {
 
     private class DBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "SeinfeldCalendar";
-	private static final int DB_VERSION = 2;
+	private static final int DB_VERSION = 3;
 
 	public DBHelper(Context context) {
 	    super(context, DB_NAME, null, DB_VERSION);
@@ -134,12 +190,16 @@ public class DBManager {
 	public void onCreate(SQLiteDatabase db) {
 	    v1Changes(db);
 	    v2Changes(db);
+	    v3Changes(db);
 	}
 
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-	    if (oldVersion == 1 && newVersion == 2) {
+	public void onUpgrade(SQLiteDatabase db, int existingVersion, int newVersion) {
+	    if (existingVersion == 1) {
 		v2Changes(db);
+		v3Changes(db);
+	    } else if (existingVersion == 2) {
+		v3Changes(db);
 	    }
 	}
 
@@ -153,6 +213,11 @@ public class DBManager {
 
 	private void v2Changes(SQLiteDatabase db) {
 	    String createNotes = "create table if not exists Notes(task_id integer, date text, notes text, primary key(task_id,date));";
+	    db.execSQL(createNotes);
+	}
+	
+	private void v3Changes(SQLiteDatabase db) {
+	    String createNotes = "alter table TASK add column REMINDER text;";
 	    db.execSQL(createNotes);
 	}
     }

@@ -1,5 +1,10 @@
 package com.pongal.seinfeld;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
@@ -25,4 +30,16 @@ public class Util {
 	return intent;
     }
 
+    public static long convertToMilliseconds(int hour24, int mins) {
+	long msTime = 0;
+
+	try {
+	    DateFormat dateFormat = new SimpleDateFormat("HH:mm");
+	    Date date = dateFormat.parse(hour24 +":" + mins);
+	    msTime = date.getTime();
+	} catch(ParseException pex) {	    
+	}
+
+	return msTime;
+    }
 }
