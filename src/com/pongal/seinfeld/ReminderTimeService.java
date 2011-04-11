@@ -36,16 +36,20 @@ public class ReminderTimeService {
 
 	if (!task.isReminderSet())
 	{
-	    Log.d("seinfeld", "(Internal Error!) Task does not have a reminder time to set!");
+	    Log.d("seinfeld", "Task '" +  task.getText() + "' does not have a reminder time to set!");
 	    return;
 	}
 	
 	final java.util.Date reminderTime = task.getReminderTime();
 	final int hour = reminderTime.getHours();
 	final int mins = reminderTime.getMinutes();
-	final long msTime = Util.convertToMilliseconds(hour, mins);
 	
-	// cancelReminder(task);
+	final Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, mins);
+        cal.set(Calendar.SECOND, 0);
+        final long msTime = cal.getTimeInMillis();
+        
 	alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, msTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 	
 	Log.d("seinfeld", "Reminder set. (" + task.getId() + "). " + task.getText() + ". " + hour + ":" + mins);
