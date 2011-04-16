@@ -9,19 +9,28 @@ import android.util.Log;
 
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
+import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class BootupReceiver extends BroadcastReceiver {
-    Context context;
-    DBManager dbMgr;
-    
     @Override
     public void onReceive(Context context, Intent intent) {
-	Log.d(null, "onReceive(Boot)");
-	
 	ReminderTimeService reminderTimeService = new ReminderTimeService(context);
-	Set<Task> tasks = dbMgr.getTasks();
+	Set<Task> tasks = getTasks(context);
 	for (Task t : tasks) {
+	    Log.d(null, "BootupReceiver: Registering '" + t.getText() + "' for reminder [" + t.getReminderTime().toString() + "]");
 	    reminderTimeService.setReminder(t);
 	}
+
+	// TODO: Have to broadcast HomeScreenWidgetProvider.ACTION_UPDATE_DATE?
+	// or HomeScreenWidgetProvider.ACTION_REFRESH? so that the home widgets
+	// refresh themselves	
+    }
+
+    private Set<Task> getTasks(Context context) {
+	DBManager dbMgr = new DBManager(context);
+	final Set<Task>tasks = dbMgr.getTasks();
+	dbMgr.close();
+
+	return tasks;
     }
 }

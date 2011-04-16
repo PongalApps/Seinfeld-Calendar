@@ -1,17 +1,14 @@
 package com.pongal.seinfeld;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.pongal.seinfeld.data.Task;
-import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
+import java.util.Calendar;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.TypedValue;
+
+import com.pongal.seinfeld.data.Task;
+import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class Util {
 
@@ -31,14 +28,11 @@ public class Util {
     }
 
     public static long convertToMilliseconds(int hour24, int mins) {
-	long msTime = 0;
-
-	try {
-	    DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-	    Date date = dateFormat.parse(hour24 +":" + mins);
-	    msTime = date.getTime();
-	} catch(ParseException pex) {	    
-	}
+	final Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, hour24);
+        cal.set(Calendar.MINUTE, mins);
+        cal.set(Calendar.SECOND, 0);
+        final long msTime = cal.getTimeInMillis();
 
 	return msTime;
     }

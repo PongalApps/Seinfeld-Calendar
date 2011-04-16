@@ -1,7 +1,5 @@
 package com.pongal.seinfeld;
 
-import java.util.Calendar;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -11,7 +9,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.pongal.seinfeld.data.Task;
-import com.pongal.seinfeld.db.DBManager;
 
 public class ReminderTimeService {
     Context context;
@@ -20,37 +17,25 @@ public class ReminderTimeService {
 	this.context = context;
     }
 
-    public void setReminder(Task task) {
-	Intent intent = new Intent(context, AlarmReceiver.class);
-	intent.putExtra("taskId", task.getId());
-	intent.putExtra("taskName", task.getText());
-	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, task.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-	AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
-	
-	/*Calendar cal = Calendar.getInstance();
-	final int hour = cal.get(Calendar.HOUR_OF_DAY);
-	final int mins = cal.get(Calendar.MINUTE);
-	final long msTime = cal.getTimeInMillis() + 5000;
-	alarmManager.setRepeating(AlarmManager.RTC, msTime + 3000, 60000, pendingIntent);*/
-
+    public void setReminder(Task task) {	
 	if (!task.isReminderSet())
 	{
 	    Log.d("seinfeld", "Task '" +  task.getText() + "' does not have a reminder time to set!");
 	    return;
 	}
 	
+	Intent intent = new Intent(context, AlarmReceiver.class);
+	intent.putExtra("taskId", task.getId());
+	intent.putExtra("taskName", task.getText());
+	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, task.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	
 	final java.util.Date reminderTime = task.getReminderTime();
 	final int hour = reminderTime.getHours();
 	final int mins = reminderTime.getMinutes();
-	
-	final Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, mins);
-        cal.set(Calendar.SECOND, 0);
-        final long msTime = cal.getTimeInMillis();
+        final long msTime = Util.convertToMilliseconds(hour, mins);
         
-	alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, msTime, AlarmManager.INTERVAL_DAY, pendingIntent);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, msTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 	
 	Log.d("seinfeld", "Reminder set. (" + task.getId() + "). " + task.getText() + ". " + hour + ":" + mins);
 	Toast.makeText(context, "Reminder set for " + hour + ":" + mins, Toast.LENGTH_LONG).show();

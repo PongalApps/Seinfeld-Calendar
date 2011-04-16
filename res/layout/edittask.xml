@@ -2,6 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:layout_height="fill_parent"
 	android:padding="10sp" android:orientation="vertical">
+	<TextView android:text="Name" android:id="@+id/textView1"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:textColor="#FFFFFF" android:layout_marginBottom="5dp"></TextView>
 	<EditText android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:id="@+id/taskName"
 		android:text="EditText" android:singleLine="true"></EditText>
@@ -9,13 +12,12 @@
 		android:id="@+id/linearLayout2" android:layout_weight="1"
 		android:layout_height="wrap_content" android:orientation="vertical"
 		android:layout_marginBottom="5dp">
-		<CheckBox android:layout_width="wrap_content" android:id="@+id/setReminder"
-			android:layout_height="wrap_content" android:text="Set Reminder"
-			android:layout_marginLeft="50dp"></CheckBox>
+		<CheckBox android:id="@+id/setReminder"
+			android:layout_height="wrap_content" android:text="Remind everyday at"
+			android:layout_width="fill_parent" android:textColor="#FFFFFF"></CheckBox>
 		<TimePicker android:clickable="false" android:id="@+id/timePicker"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_marginLeft="50dp"
-			android:visibility="gone"></TimePicker>
+			android:layout_height="wrap_content" android:visibility="visible"
+			android:layout_gravity="left" android:layout_width="wrap_content"></TimePicker>
 	</LinearLayout>
 	<LinearLayout android:id="@+id/linearLayout1"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

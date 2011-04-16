@@ -11,9 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.pongal.seinfeld.R;
-import com.pongal.seinfeld.task.TaskActivity;
-
 public class AlarmReceiver extends BroadcastReceiver {
 
     // private int SIMPLE_NOTFICATION_ID = 1;

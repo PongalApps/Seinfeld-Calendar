@@ -1,14 +1,9 @@
 package com.pongal.seinfeld.task;
 
-import java.util.Calendar;
 import java.util.Set;
 
 import android.app.Activity;
-import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,18 +12,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
 
-import com.pongal.seinfeld.AlarmReceiver;
 import com.pongal.seinfeld.CalendarActivity;
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.ReminderTimeService;
 import com.pongal.seinfeld.SplashScreenActivity;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
-
-/*import android.net.Uri;
-import android.content.ContentValues;*/
 
 public class TaskActivity extends Activity {
 
@@ -44,6 +34,8 @@ public class TaskActivity extends Activity {
 	initDBManager();
 	refreshTaskList();
 	
+	// NOTE: Uncomment code to clear shared preferences if any problems encountered
+	// related to shared preferences and values stored in the preferences.
 	/*SharedPreferences sharedPrefs = getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
 	Editor prefsEditor = sharedPrefs.edit();
 	prefsEditor.clear();
