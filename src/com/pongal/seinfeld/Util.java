@@ -7,14 +7,16 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.TypedValue;
 
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class Util {
 
     public static int getInDIP(int pixels, Context context) {
-	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, (float) pixels, context.getResources()
-		.getDisplayMetrics());
+	return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+		(float) pixels,
+		context.getResources().getDisplayMetrics());
     }
 
     public static Intent getBroadcast(Task t, String action) {
@@ -22,7 +24,7 @@ public class Util {
 	intent.putExtra(HomeScreenWidgetProvider.TASK_ID, t.getId());
 	intent.putExtra(HomeScreenWidgetProvider.TASK_NAME, t.getText());
 	intent.putExtra(HomeScreenWidgetProvider.TASK_MARKED, t.isTodayAccomplished());
-	Uri data = Uri.withAppendedPath(Uri.parse(HomeScreenWidgetProvider.URI_SCHEME + "://widget/id/"), "");
+	Uri data = Uri.withAppendedPath(Uri.parse(Constants.URI_SCHEME + "://widget/id/"), "");
 	intent.setData(data);
 	return intent;
     }

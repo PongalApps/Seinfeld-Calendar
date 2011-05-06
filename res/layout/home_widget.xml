@@ -4,7 +4,7 @@
 	android:background="@layout/taskbg" android:layout_marginBottom="5dp"
 	android:layout_marginTop="5dp" android:layout_marginRight="5dp"
 	android:layout_marginLeft="5dp" android:orientation="vertical">
-	<TextView android:id="@+id/taskName" android:text="Problem loading widget"
+	<TextView android:id="@+id/taskName" android:text="Loading..."
 		android:textColor="#FFFFFF" android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:gravity="center"
 		android:padding="5dp" android:textSize="12sp" android:background="@layout/taskbg"

@@ -1,5 +1,7 @@
 package com.pongal.seinfeld.homescreen;
 
+import java.util.Calendar;
+
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -16,9 +18,11 @@ import android.widget.RemoteViews;
 
 import com.pongal.seinfeld.CalendarActivity;
 import com.pongal.seinfeld.R;
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.TaskSnippet;
 import com.pongal.seinfeld.db.DBManager;
+import com.pongal.seinfeld.homescreen.WidgetConfiguration.TaskSharedConfigNames;
 
 public class HomeScreenWidgetProvider extends AppWidgetProvider {
 
@@ -28,7 +32,9 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     public static final String ACTION_NEXT_TASK = "com.seinfeld.action.homeScreenNextTask";
     public static final String ACTION_UPDATE_DATE = "com.seinfeld.action.homeScreenUpdateDate";
     public static final String ACTION_DELETE = "com.seinfeld.action.homeScreenTaskDelete";
-    public static final String URI_SCHEME = "seinfeldcal";
+    public static final String ACTION_DATE_CHANGED = "android.intent.action.DATE_CHANGED";
+    
+    // public static final String URI_SCHEME = "seinfeldcal";
 
     public static final String WIDGET_ID = "widget_id";
     public static final String TASK = "task";
@@ -39,20 +45,39 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     public static final String AppNameTag = "seinfeld";
 
     private DBManager dbManager;
-    AppWidgetManager manager;
+    private AppWidgetManager manager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
 	final String actionText = intent.getAction();
 	manager = AppWidgetManager.getInstance(context);
-	Log.d("sf", "OnReceive: " + actionText);
-	if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(actionText)) {
-	    final int[] appWidgetId = intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-	    Log.d("sf", "Widget ids: " + appWidgetId[0]);
-	    refreshWidget(context, appWidgetId[0]);
+	
+	Log.d(Constants.LogTag, "HomeScreenWidget.OnReceive: " + actionText);
+	if (AppWidgetManager.ACTION_APPWIDGET_ENABLED.equals(actionText)) {
+	    //final int[] appWidgetId = intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+	    //Log.d(Constants.LogTag, "Widget ids: " + appWidgetId[0]);
+	    //refreshWidget(context, appWidgetId[0]);
+	    // TODO: Register reminder ...
+
+	    final Bundle bundle = intent.getExtras();
+	    if (bundle == null) {
+		Log.d(Constants.LogTag, "onReceive(ACTION_APPWIDGET_ENABLED).....No Extras !!!");
+		return;
+	    }
+
+
+	    int wid = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_IDS, -1);
+	    Log.d(Constants.LogTag, String.format("onReceive(ACTION_APPWIDGET_ENABLED, 'EXTRA_APPWIDGET_IDS').....%d", wid));
+
+	    wid = bundle.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID);
+	    Log.d(Constants.LogTag, String.format("onReceive(ACTION_APPWIDGET_ENABLED, EXTRA_APPWIDGET_ID).....%d", wid));	    
+	} else if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(actionText)) {
+	    final int[] appWidgetIds = intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+	    for (int widgetId : appWidgetIds) {		
+		refreshWidget(context, widgetId);
+	    }
 	} else if (ACTION_REFRESH.equals(actionText)) {
-	    int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(
-		    new ComponentName(context, HomeScreenWidgetProvider.class));
+	    int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, HomeScreenWidgetProvider.class));
 	    Bundle bundle = intent.getExtras();
 	    int taskId = bundle.getInt(TASK_ID);
 	    String taskName = bundle.getString(TASK_NAME);
@@ -71,7 +96,18 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	    updateSharedPrefs(context, appWidgetId, marked);
 	    refreshWidget(context, appWidgetId);
 	    dbManager.close();
-	} else if (ACTION_UPDATE_DATE.equals(actionText)) {
+	} /*else if (ACTION_DATE_CHANGED.equals(actionText)) {
+	    initDBManager(context);	    
+	    final int[] widgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(new ComponentName(context, HomeScreenWidgetProvider.class));
+	    for (int widgetId : widgetIds) {
+		// TODO: Get the done flag for the current day
+		// and update it in the shared preferences.
+		updateSharedPrefs(context, widgetId, false);
+		refreshWidget(context, widgetId);
+	    }
+	    
+	    dbManager.close();
+	}*/ else if (ACTION_UPDATE_DATE.equals(actionText)) {
 	    final int appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_IDS);
 	    // Clear done flag for the next day
 	    updateSharedPrefs(context, appWidgetId, false);
@@ -111,9 +147,8 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId);
 	intent.putExtra(TASK_ID, taskSnip.taskId);
 	intent.putExtra(TASK_NAME, taskSnip.taskName);
-	intent.putExtra(TASK_MARKED, taskSnip.doneToday);
-	Uri data = Uri.withAppendedPath(Uri.parse(URI_SCHEME + "://widget/id/"), String.valueOf(appWidgetId));
-	intent.setData(data);
+	intent.putExtra(TASK_MARKED, taskSnip.doneToday);	
+	intent.setData(getUriData(appWidgetId));
 	PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	return pendingIntent;
     }
@@ -124,15 +159,29 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	return pendingIntent;
     }
+    
+    private static Uri getUriData(int widgetId) {
+	Uri baseUri = Uri.parse(Constants.URI_SCHEME + "://widget/id/");
+	return Uri.withAppendedPath(baseUri, String.valueOf(widgetId));
+    }
 
     private void updateSharedPrefs(Context context, int widgetId, int taskId, String taskName, boolean taskDone) {
 	SharedPreferences config = context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
-	int widgetTaskId = config.getInt(String.format(WidgetConfiguration.TASK_ID_SHR, widgetId), -1);
+	WidgetConfiguration.TaskSharedConfigNames cfgNames = new WidgetConfiguration.TaskSharedConfigNames(widgetId);
+	
+	final int widgetTaskId = config.getInt(cfgNames.Id, -1);
+	// int widgetTaskId = config.getInt(String.format(WidgetConfiguration.TASK_ID_SHR, widgetId), -1);
+	
 	if (widgetTaskId == taskId) {
 	    SharedPreferences.Editor edit = config.edit();
-	    edit.putInt(String.format(WidgetConfiguration.TASK_ID_SHR, widgetId), taskId);
-	    edit.putString(String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId), taskName);
-	    edit.putBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), taskDone);
+//	    edit.putInt(String.format(WidgetConfiguration.TASK_ID_SHR, widgetId), taskId);
+//	    edit.putString(String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId), taskName);
+//	    edit.putBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), taskDone);
+	    
+	    edit.putInt(cfgNames.Id, taskId);
+	    edit.putString(cfgNames.Name, taskName);
+	    edit.putBoolean(cfgNames.Done, taskDone);
+	    
 	    edit.commit();
 	    refreshWidget(context, widgetId);
 	}
@@ -141,12 +190,13 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     private void updateSharedPrefs(Context context, int widgetId, boolean taskDone) {
 	SharedPreferences config = context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
 	Editor editor = config.edit();
-	editor.putBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), taskDone);
+	//editor.putBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), taskDone);
+	editor.putBoolean(new WidgetConfiguration.TaskSharedConfigNames(widgetId).Done, taskDone);
 	editor.commit();
     }
 
     private void deleteWidgetPrefs(Context context, int widgetId) {
-	final String taskIdPrefName = String.format(WidgetConfiguration.TASK_ID_SHR, widgetId);
+	/*final String taskIdPrefName = String.format(WidgetConfiguration.TASK_ID_SHR, widgetId);
 	final String taskNamePrefName = String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId);
 	final String taskDonePrefName = String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId);
 	SharedPreferences config = context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
@@ -154,16 +204,26 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	prefsEditor.remove(taskIdPrefName);
 	prefsEditor.remove(taskNamePrefName);
 	prefsEditor.remove(taskDonePrefName);
+	prefsEditor.commit();*/
+	
+	WidgetConfiguration.TaskSharedConfigNames cfgNames = new WidgetConfiguration.TaskSharedConfigNames(widgetId);
+	SharedPreferences config = context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
+	Editor prefsEditor = config.edit();
+	prefsEditor.remove(cfgNames.Id);
+	prefsEditor.remove(cfgNames.Name);
+	prefsEditor.remove(cfgNames.Done);
 	prefsEditor.commit();
-    }
+    }   
 
     public static void refreshWidget(Context context, int widgetId) {
-	TaskSnippet taskSnip = getFromSharedPrefs(context, widgetId);
+	Log.d(Constants.LogTag, String.format("Refreshing widget (ID: %d).", widgetId));
+	
+	TaskSnippet taskInfo = getFromSharedPrefs(context, widgetId);
 	AppWidgetManager manager = AppWidgetManager.getInstance(context);
-	PendingIntent selectPendingIntent = getPendingIntent(context, widgetId, taskSnip);
-	PendingIntent deselectPendingIntent = getPendingIntent(context, widgetId, taskSnip);
-	PendingIntent headerIntent = getHeaderPendingIntent(context, widgetId, taskSnip);
-	RemoteViews views = getRemoteView(context, taskSnip);
+	PendingIntent selectPendingIntent = getPendingIntent(context, widgetId, taskInfo);
+	PendingIntent deselectPendingIntent = getPendingIntent(context, widgetId, taskInfo);
+	PendingIntent headerIntent = getHeaderPendingIntent(context, widgetId, taskInfo);
+	RemoteViews views = getRemoteView(context, taskInfo);
 	views.setOnClickPendingIntent(R.id.currentDate, selectPendingIntent);
 	views.setOnClickPendingIntent(R.id.currentDateSelected, deselectPendingIntent);
 	views.setOnClickPendingIntent(R.id.taskName, headerIntent);
@@ -172,24 +232,35 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 
     private static TaskSnippet getFromSharedPrefs(Context context, int widgetId) {
 	SharedPreferences config = context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
-	TaskSnippet taskSnip = new TaskSnippet();
-	taskSnip.taskId = config.getInt(String.format(WidgetConfiguration.TASK_ID_SHR, widgetId), -1);
-	taskSnip.taskName = config.getString(String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId), "");
-	taskSnip.doneToday = config.getBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), false);
-	Log.d("sf", "task: " + taskSnip);
-	return taskSnip;
+	
+	TaskSharedConfigNames cfgNames = new TaskSharedConfigNames(widgetId);	
+	final int taskId = config.getInt(cfgNames.Id, -1);
+	final String taskName = config.getString(cfgNames.Name, "");
+	final boolean doneToday = config.getBoolean(cfgNames.Done, false);	
+	TaskSnippet taskInfo = new TaskSnippet(taskId, taskName, doneToday);
+	
+	/*TaskSnippet taskInfo = new TaskSnippet();
+	taskInfo.taskId = config.getInt(String.format(WidgetConfiguration.TASK_ID_SHR, widgetId), -1);
+	taskInfo.taskName = config.getString(String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId), "");
+	taskInfo.doneToday = config.getBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId), false);*/
+	
+	Log.d(Constants.LogTag, "Task (from shared prefs): " + taskInfo.toString());
+	return taskInfo;
     }
 
-    private static RemoteViews getRemoteView(Context context, TaskSnippet taskSnip) {
+    private static RemoteViews getRemoteView(Context context, TaskSnippet taskInfo) {
 	Date today = new Date();
 	RemoteViews view = new RemoteViews(context.getPackageName(), R.layout.home_widget);
-	view.setTextViewText(R.id.taskName, taskSnip.taskName);
-	final int selectedId = taskSnip.doneToday ? R.id.currentDateSelected : R.id.currentDate;
-	view.setTextViewText(selectedId, today.format("MMM").toUpperCase() + "  " + today.getDay());
+	view.setTextViewText(R.id.taskName, taskInfo.taskName);
+	
+	final String dateString = today.format("MMM").toUpperCase() + "  " + today.getDay();
+	Log.d(Constants.LogTag, String.format("getRemoteView: Date is %s", dateString));
+	
+	final int selectedId = taskInfo.doneToday ? R.id.currentDateSelected : R.id.currentDate;
+	view.setTextViewText(selectedId, dateString);
 
 	view.setViewVisibility(R.id.currentDate, R.id.currentDate == selectedId ? View.VISIBLE : View.GONE);
-	view.setViewVisibility(R.id.currentDateSelected, R.id.currentDateSelected == selectedId ? View.VISIBLE
-		: View.GONE);
+	view.setViewVisibility(R.id.currentDateSelected, R.id.currentDateSelected == selectedId ? View.VISIBLE : View.GONE);
 	return view;
     }
 

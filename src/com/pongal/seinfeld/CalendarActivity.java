@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.pongal.seinfeld.DateState.Status;
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Date;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
@@ -41,7 +42,8 @@ public class CalendarActivity extends Activity {
 
 	calendar.addSelectHandler(getCalendarSelectHandler());
 	calendar.addNotesChangeListener(getNotesActionListener());
-    }
+    }   
+    
 
     @Override
     protected void onResume() {
@@ -60,7 +62,7 @@ public class CalendarActivity extends Activity {
 	return new OnEditorActionListener() {
 	    @Override
 	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-		Log.d("seinfeld", (actionId == EditorInfo.IME_ACTION_DONE) + "");
+		Log.d(Constants.LogTag, (actionId == EditorInfo.IME_ACTION_DONE) + "");
 		if (actionId == EditorInfo.IME_ACTION_DONE) {
 		    updateNotes(calendar.getDisplayedMonth(), v.getText().toString());
 		    return true;

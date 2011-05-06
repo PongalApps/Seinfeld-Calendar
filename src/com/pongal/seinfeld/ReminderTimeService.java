@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Task;
 
 public class ReminderTimeService {
@@ -20,7 +21,7 @@ public class ReminderTimeService {
     public void setReminder(Task task) {	
 	if (!task.isReminderSet())
 	{
-	    Log.d("seinfeld", "Task '" +  task.getText() + "' does not have a reminder time to set!");
+	    Log.d(Constants.LogTag, "Task '" +  task.getText() + "' does not have a reminder time to set!");
 	    return;
 	}
 	
@@ -37,7 +38,7 @@ public class ReminderTimeService {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, msTime, AlarmManager.INTERVAL_DAY, pendingIntent);
 	
-	Log.d("seinfeld", "Reminder set. (" + task.getId() + "). " + task.getText() + ". " + hour + ":" + mins);
+	Log.d(Constants.LogTag, "Reminder set. (" + task.getId() + "). " + task.getText() + ". " + hour + ":" + mins);
 	Toast.makeText(context, "Reminder set for " + hour + ":" + mins, Toast.LENGTH_LONG).show();
     }
 

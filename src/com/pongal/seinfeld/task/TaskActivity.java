@@ -5,6 +5,8 @@ import java.util.Set;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -17,8 +19,10 @@ import com.pongal.seinfeld.CalendarActivity;
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.ReminderTimeService;
 import com.pongal.seinfeld.SplashScreenActivity;
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
+import com.pongal.seinfeld.homescreen.WidgetConfiguration;
 
 public class TaskActivity extends Activity {
 
@@ -34,12 +38,17 @@ public class TaskActivity extends Activity {
 	initDBManager();
 	refreshTaskList();
 	
-	// NOTE: Uncomment code to clear shared preferences if any problems encountered
-	// related to shared preferences and values stored in the preferences.
-	/*SharedPreferences sharedPrefs = getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
-	Editor prefsEditor = sharedPrefs.edit();
-	prefsEditor.clear();
-	prefsEditor.commit();*/
+	// NOTE: To be used only when something screwed up with shared preferences or widgets
+	/*deleteSharedPreferences(WidgetConfiguration.PREFS_NAME);*/
+    }
+    
+    // NOTE: To be used only when something screwed up with shared preferences or widgets
+    private void deleteSharedPreferences(String sharedPrefsName) {
+	Log.d(Constants.LogTag, String.format("!Deleting shared preferences '%s'", sharedPrefsName));
+	SharedPreferences sharedCfg = getApplicationContext().getSharedPreferences(sharedPrefsName, 0);
+	Editor editor = sharedCfg.edit();
+	editor.clear();
+	editor.commit();
     }
 
     @Override
@@ -105,7 +114,7 @@ public class TaskActivity extends Activity {
 	return new TaskUpdatedHandler() {
 	    @Override
 	    public void onUpdate(Task task) {
-		Log.d("seinfeld", "!@# SaveTaskHandler onUpdate....");
+		Log.d(Constants.LogTag, "!@# SaveTaskHandler onUpdate....");
 		final int taskId = dbManager.updateTask(task);
 		refreshTaskList();
 

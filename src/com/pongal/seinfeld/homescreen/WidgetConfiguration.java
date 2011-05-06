@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.Util;
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
 
@@ -78,11 +79,17 @@ public class WidgetConfiguration extends Activity {
     }
 
     private void updateSharedPrefs(int widgetId, Task task) {
+	TaskSharedConfigNames cfgNames = new TaskSharedConfigNames(widgetId);
 	SharedPreferences config = getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
 	SharedPreferences.Editor edit = config.edit();
-	edit.putInt(String.format(TASK_ID_SHR, widgetId), task.getId());
-	edit.putString(String.format(TASK_NAME_SHR, widgetId), task.getText());
-	edit.putBoolean(String.format(TASK_DONE_SHR, widgetId), task.isTodayAccomplished());
+//	edit.putInt(String.format(TASK_ID_SHR, widgetId), task.getId());
+//	edit.putString(String.format(TASK_NAME_SHR, widgetId), task.getText());
+//	edit.putBoolean(String.format(TASK_DONE_SHR, widgetId), task.isTodayAccomplished());
+	
+	edit.putInt(cfgNames.Id, task.getId());
+	edit.putString(cfgNames.Name, task.getText());
+	edit.putBoolean(cfgNames.Done, task.isTodayAccomplished());
+	
 	edit.commit();
     }
 
@@ -106,12 +113,14 @@ public class WidgetConfiguration extends Activity {
 		final Context context = getApplicationContext();
 		final Task task = (Task) v.getTag();
 		
-		HomeScreenWidgetProvider.refreshWidget(context, appWidgetId);
-		setDateChangeIntent();		
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		setResult(RESULT_OK, resultValue);
+		
+		setDateChangeIntent();
 		updateSharedPrefs(appWidgetId, task);
+		HomeScreenWidgetProvider.refreshWidget(context, appWidgetId);
+		
 		finish();
 	    }
 	};
@@ -125,12 +134,9 @@ public class WidgetConfiguration extends Activity {
 
     private void setDateChangeIntent() {
 	Intent intent = new Intent(HomeScreenWidgetProvider.ACTION_UPDATE_DATE);
-	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId);
-	Uri data = Uri.withAppendedPath(Uri.parse(HomeScreenWidgetProvider.URI_SCHEME + "://widget/id/"),
-		String.valueOf(appWidgetId));
-	intent.setData(data);
-	PendingIntent datePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent,
-		PendingIntent.FLAG_UPDATE_CURRENT);
+	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId);	
+	intent.setData(getUriData(appWidgetId));
+	PendingIntent datePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 	
 	AlarmManager alarms = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 	alarms.cancel(datePendingIntent);
@@ -146,10 +152,28 @@ public class WidgetConfiguration extends Activity {
 	midnight.set(Calendar.MILLISECOND, 0);
 	return midnight.getTimeInMillis();
     }
+    
+    private static Uri getUriData(int widgetId) {
+	// Uri.withAppendedPath(Uri.parse(HomeScreenWidgetProvider.URI_SCHEME + "://widget/id/"), String.valueOf(appWidgetId));
+	Uri baseUri = Uri.parse(Constants.URI_SCHEME + "://widget/id/");
+	return Uri.withAppendedPath(baseUri, String.valueOf(widgetId));
+    }
 
     private void initDBManager(Context context) {
 	if (dbManager == null) {
 	    dbManager = new DBManager(context);
 	}
+    }
+    
+    public static class TaskSharedConfigNames {
+	public String Id;
+	public String Name;
+	public String Done;
+	
+	public TaskSharedConfigNames(int widgetId) {
+	    this.Id = String.format(WidgetConfiguration.TASK_ID_SHR, widgetId);
+	    this.Name = String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId);
+	    this.Done = String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId);
+	}	
     }
 }

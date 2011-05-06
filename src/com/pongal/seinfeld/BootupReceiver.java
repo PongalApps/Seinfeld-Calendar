@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
-import com.pongal.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class BootupReceiver extends BroadcastReceiver {
     @Override

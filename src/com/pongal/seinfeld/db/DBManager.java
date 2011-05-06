@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.pongal.seinfeld.data.Constants;
 import android.util.Log;
 
 import com.pongal.seinfeld.data.Date;
@@ -34,7 +35,7 @@ public class DBManager {
     
     public void createTask(String taskName, java.util.Date reminderTime) {
 	final String milliSecondsText = reminderTime == null ? "" : String.valueOf(reminderTime.getTime());
-	Log.d("seinfeld", "Create Task: " + String.format("insert into task(name, reminder) values (%s, %s)", taskName, milliSecondsText));
+	Log.d(Constants.LogTag, "Create Task: " + String.format("insert into task(name, reminder) values (%s, %s)", taskName, milliSecondsText));
 	database.execSQL("insert into task(name, reminder) values (?, ?)", new String[] { taskName, milliSecondsText });
     }
 
@@ -56,9 +57,9 @@ public class DBManager {
 	    task = new Task(result.getInt(0), result.getString(1));
 	    
 	    final String reminderTimeText = result.getString(2);
-	    Log.d("seinfeld", "Reminder: " + reminderTimeText);
+	    // Log.d(Constants.LogTag, "Reminder: " + reminderTimeText);
 	    if (reminderTimeText != null && reminderTimeText.length() != 0) {
-		Log.d("seinfeld", "Task: " + task.getText() + "..." + reminderTimeText);
+		Log.d(Constants.LogTag, "Task: " + task.getText() + "..." + reminderTimeText);
 		long reminderTimeMilliSecs = Long.parseLong(reminderTimeText, 10);
 		task.setReminderTime(new java.util.Date(reminderTimeMilliSecs));
 	    }
@@ -98,7 +99,7 @@ public class DBManager {
 	final String milliSecondsText = reminderTime == null ? "" : String.valueOf(reminderTime.getTime());
 	
 	final String formatSpec = "insert or replace into task(id, name, reminder) values (%s, %s, %s)";
-	Log.d("seinfeld", "updateTask: " + String.format(formatSpec, task.getId(), task.getText(), milliSecondsText));
+	Log.d(Constants.LogTag, "updateTask: " + String.format(formatSpec, task.getId(), task.getText(), milliSecondsText));
 	
 	String insertOrUpdateQuery = "insert or replace into task(id, name, reminder) values (?, ?, ?);";
 	database.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText(), milliSecondsText });
@@ -131,15 +132,16 @@ public class DBManager {
 	database.execSQL(deleteQuery, params);
     }
     
-    public String queryReminderTime() {
+    /*public String queryReminderTime() {
 	return queryUserSettings("reminder_time");
     }
 
     private String queryUserSettings(String string) {
-	/*Cursor result = database.rawQuery("select * from UserSettings where setting = ?", new String[] { string });	
-	String value = result.moveToNext() ? result.getString(result.getColumnIndex("value")) : null;
-	result.close();
-	return value;*/
+//	Cursor result = database.rawQuery("select * from UserSettings where setting = ?", new String[] { string });	
+//	String value = result.moveToNext() ? result.getString(result.getColumnIndex("value")) : null;
+//	result.close();
+//	return value;
+	
 	return "09:00";
     }
 
@@ -148,16 +150,16 @@ public class DBManager {
     }
 
     public void updateUserSettings(String setting, String value) {
-	/*String[] selector = new String[] { setting };
-	ContentValues values = new ContentValues();
-	values.put("value", value);
-	int updateCnt = database.update("UserSettings", values, "setting = ?", selector);
-	if (updateCnt == 0) {
-	    values.put("setting", setting);
-	    values.put("value", value);
-	    database.insert("UserSettings", null, values);
-	}*/
-    }
+//	String[] selector = new String[] { setting };
+//	ContentValues values = new ContentValues();
+//	values.put("value", value);
+//	int updateCnt = database.update("UserSettings", values, "setting = ?", selector);
+//	if (updateCnt == 0) {
+//	    values.put("setting", setting);
+//	    values.put("value", value);
+//	    database.insert("UserSettings", null, values);
+//	}
+    }*/
 
     private boolean checkExistence(int taskId, Date date) {
 	boolean exists = false;
