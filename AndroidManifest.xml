@@ -38,6 +38,7 @@
 		<receiver android:name=".homescreen.HomeScreenWidgetProvider">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+				<action android:name="android.intent.action.DATE_CHANGED" />
 			</intent-filter>
 			<meta-data android:name="android.appwidget.provider" android:resource="@xml/calendar_widget_info" />
 		</receiver>
@@ -50,7 +51,6 @@
 				<action android:name="com.seinfeld.action.homeScreenDeselectDate" />
 				<action android:name="com.seinfeld.action.homeScreenUpdateDate" />
 				<action android:name="com.seinfeld.action.homeScreenTaskDelete" />
-				<action android:name="android.intent.action.DATE_CHANGED" />
 				<data android:scheme="seinfeldcal" />
 			</intent-filter>
 			<meta-data android:name="android.appwidget.provider" android:resource="@xml/calendar_widget_info" />
