@@ -52,14 +52,7 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 	final String actionText = intent.getAction();
 	manager = AppWidgetManager.getInstance(context);
 
-	Log.d(Constants.LogTag, "HomeScreenWidget.OnReceive: " + actionText);
 	if (AppWidgetManager.ACTION_APPWIDGET_ENABLED.equals(actionText)) {
-	    // final int[] appWidgetId =
-	    // intent.getExtras().getIntArray(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-	    // Log.d(Constants.LogTag, "Widget ids: " + appWidgetId[0]);
-	    // refreshWidget(context, appWidgetId[0]);
-	    // TODO: Register reminder ...
-
 	    final Bundle bundle = intent.getExtras();
 	    if (bundle == null) {
 		Log.d(Constants.LogTag, "onReceive(ACTION_APPWIDGET_ENABLED).....No Extras !!!");
@@ -148,7 +141,8 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     private static PendingIntent getHeaderPendingIntent(Context context, int appWidetId, TaskSnippet taskSnip) {
 	Intent intent = new Intent(context, CalendarActivity.class);
 	intent.putExtra("taskId", taskSnip.taskId);
-	PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidetId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+	PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidetId, intent,
+		PendingIntent.FLAG_CANCEL_CURRENT);
 	return pendingIntent;
     }
 
@@ -194,21 +188,6 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     }
 
     private void deleteWidgetPrefs(Context context, int widgetId) {
-	/*
-	 * final String taskIdPrefName =
-	 * String.format(WidgetConfiguration.TASK_ID_SHR, widgetId); final
-	 * String taskNamePrefName =
-	 * String.format(WidgetConfiguration.TASK_NAME_SHR, widgetId); final
-	 * String taskDonePrefName =
-	 * String.format(WidgetConfiguration.TASK_DONE_SHR, widgetId);
-	 * SharedPreferences config =
-	 * context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
-	 * Editor prefsEditor = config.edit();
-	 * prefsEditor.remove(taskIdPrefName);
-	 * prefsEditor.remove(taskNamePrefName);
-	 * prefsEditor.remove(taskDonePrefName); prefsEditor.commit();
-	 */
-
 	WidgetConfiguration.TaskSharedConfigNames cfgNames = new WidgetConfiguration.TaskSharedConfigNames(widgetId);
 	SharedPreferences config = context.getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
 	Editor prefsEditor = config.edit();
@@ -238,22 +217,11 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 
 	TaskSharedConfigNames cfgNames = new TaskSharedConfigNames(widgetId);
 	final int taskId = config.getInt(cfgNames.Id, -1);
-	
+
 	final String taskName = config.getString(cfgNames.Name, "");
 	final boolean doneToday = config.getBoolean(cfgNames.Done, false);
 	TaskSnippet taskInfo = new TaskSnippet(taskId, taskName, doneToday);
 	Log.d(Constants.LogTag, "Task snippet: " + taskInfo);
-	
-	/*
-	 * TaskSnippet taskInfo = new TaskSnippet(); taskInfo.taskId =
-	 * config.getInt(String.format(WidgetConfiguration.TASK_ID_SHR,
-	 * widgetId), -1); taskInfo.taskName =
-	 * config.getString(String.format(WidgetConfiguration.TASK_NAME_SHR,
-	 * widgetId), ""); taskInfo.doneToday =
-	 * config.getBoolean(String.format(WidgetConfiguration.TASK_DONE_SHR,
-	 * widgetId), false);
-	 */
-
 	Log.d(Constants.LogTag, "Task (from shared prefs): " + taskInfo.toString());
 	return taskInfo;
     }

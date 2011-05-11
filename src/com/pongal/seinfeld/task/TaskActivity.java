@@ -113,7 +113,6 @@ public class TaskActivity extends Activity {
 	return new TaskUpdatedHandler() {
 	    @Override
 	    public void onUpdate(Task task) {
-		Log.d(Constants.LogTag, "!@# SaveTaskHandler onUpdate....");
 		final int taskId = dbManager.updateTask(task);
 		refreshTaskList();
 

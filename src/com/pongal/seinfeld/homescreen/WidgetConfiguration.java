@@ -1,14 +1,21 @@
 package com.pongal.seinfeld.homescreen;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Map;
 import java.util.Set;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
@@ -16,6 +23,7 @@ import android.widget.TextView;
 
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.Util;
+import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
 
@@ -114,7 +122,7 @@ public class WidgetConfiguration extends Activity {
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		setResult(RESULT_OK, resultValue);
 
-		// setDateChangeIntent();
+		setDateChangeIntent();
 		updateSharedPrefs(appWidgetId, task);
 		HomeScreenWidgetProvider.refreshWidget(context, appWidgetId);
 
@@ -129,13 +137,35 @@ public class WidgetConfiguration extends Activity {
 	setResult(RESULT_CANCELED, cancelResultValue);
     }
 
-    /*
-     * private static Uri getUriData(int widgetId) { //
-     * Uri.withAppendedPath(Uri.parse(HomeScreenWidgetProvider.URI_SCHEME + //
-     * "://widget/id/"), String.valueOf(appWidgetId)); Uri baseUri =
-     * Uri.parse(Constants.URI_SCHEME + "://widget/id/"); return
-     * Uri.withAppendedPath(baseUri, String.valueOf(widgetId)); }
-     */
+    private void setDateChangeIntent() {
+	Intent intent = new Intent(HomeScreenWidgetProvider.ACTION_UPDATE_DATE);
+	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId);
+	intent.setData(getUriData(appWidgetId));
+	PendingIntent datePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent,
+		PendingIntent.FLAG_UPDATE_CURRENT);
+
+	AlarmManager alarms = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+	alarms.cancel(datePendingIntent);
+	alarms.setRepeating(AlarmManager.RTC, getTimeForMidnight(), AlarmManager.INTERVAL_DAY, datePendingIntent);
+    }
+
+    private long getTimeForMidnight() {
+	Calendar midnight = Calendar.getInstance();
+	midnight.add(Calendar.DATE, 1);
+	midnight.set(Calendar.HOUR_OF_DAY, 0);
+	midnight.set(Calendar.MINUTE, 0);
+	midnight.set(Calendar.SECOND, 0);
+	midnight.set(Calendar.MILLISECOND, 0);
+	Log.d(Constants.LogTag, "Setting for midnight: "+DateFormat.format("dd-MM-yyyy hh:mm:ss a", midnight.getTimeInMillis()));
+	return midnight.getTimeInMillis();
+    }
+
+    private static Uri getUriData(int widgetId) {
+	// Uri.withAppendedPath(Uri.parse(HomeScreenWidgetProvider.URI_SCHEME +
+	// "://widget/id/"), String.valueOf(appWidgetId));
+	Uri baseUri = Uri.parse(Constants.URI_SCHEME + "://widget/id/");
+	return Uri.withAppendedPath(baseUri, String.valueOf(widgetId));
+    }
 
     private void initDBManager(Context context) {
 	if (dbManager == null) {
