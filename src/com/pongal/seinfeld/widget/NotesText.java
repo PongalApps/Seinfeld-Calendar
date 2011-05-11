@@ -2,8 +2,6 @@ package com.pongal.seinfeld.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
 
 public class NotesText extends EditText {
@@ -20,7 +18,7 @@ public class NotesText extends EditText {
 	super(context, attrs);
     }
 
-    @Override
+/*    @Override
     public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
 	InputConnection connection = super.onCreateInputConnection(outAttrs);
 	int imeActions = outAttrs.imeOptions & EditorInfo.IME_MASK_ACTION;
@@ -35,4 +33,6 @@ public class NotesText extends EditText {
 	}
 	return connection;
     }
+*/
+    
 }

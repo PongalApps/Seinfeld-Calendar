@@ -28,6 +28,7 @@ public class CalendarActivity extends Activity {
 	super.onCreate(savedInstanceState);
 	initDBManager();
 	final int taskId = getIntent().getExtras().getInt("taskId");
+	Log.d(Constants.LogTag, "Refresh for id: " + taskId);
 	task = dbManager.getTaskDetails(taskId);
 
 	setContentView(R.layout.main);

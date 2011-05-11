@@ -30,12 +30,19 @@
 			<GridView android:layout_width="fill_parent"
 				android:layout_weight="0" android:layout_height="wrap_content"
 				android:id="@+id/cal_datesGrid"></GridView>
-			<EditText android:id="@+id/cal_notes" android:layout_width="fill_parent"
-				android:text="" android:gravity="top" android:layout_weight="1"
-				android:layout_height="fill_parent" android:imeOptions="actionDone"
-				android:textColor="#FFFFFF" android:background="@layout/notesbg"
-				android:textSize="14dp" android:padding="5dp" android:layout_margin="5dp"
-				android:hint="Add Notes..." android:singleLine="false"></EditText>
+			<LinearLayout android:id="@+id/linearLayout3"
+				android:layout_height="fill_parent" android:layout_width="fill_parent"
+				android:orientation="horizontal">
+				<EditText android:id="@+id/cal_notes" android:layout_width="fill_parent"
+					android:text="" android:gravity="top" android:layout_weight="1"
+					android:layout_height="fill_parent" android:textColor="#FFFFFF"
+					android:background="@layout/notesbg" android:textSize="14dp"
+					android:padding="5dp" android:layout_margin="5dp" android:hint="Add Notes..."
+					android:singleLine="false"></EditText>
+				<Button android:layout_height="wrap_content"
+					android:layout_width="wrap_content" android:text="Done" android:id="@+id/cal_done"
+					android:layout_marginTop="5dp" android:layout_marginRight="5dp"></Button>
+			</LinearLayout>
 		</LinearLayout>
 	</ScrollView>
 </LinearLayout>

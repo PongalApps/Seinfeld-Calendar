@@ -22,7 +22,6 @@ import com.pongal.seinfeld.SplashScreenActivity;
 import com.pongal.seinfeld.data.Constants;
 import com.pongal.seinfeld.data.Task;
 import com.pongal.seinfeld.db.DBManager;
-import com.pongal.seinfeld.homescreen.WidgetConfiguration;
 
 public class TaskActivity extends Activity {
 

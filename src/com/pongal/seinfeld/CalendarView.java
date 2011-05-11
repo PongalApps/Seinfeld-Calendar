@@ -2,6 +2,7 @@ package com.pongal.seinfeld;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -27,6 +28,7 @@ public class CalendarView extends LinearLayout {
     Task task;
     Context context;
     OnEditorActionListener notesActionListener;
+    Button doneBtn;
 
     public CalendarView(Context context) {
 	super(context);
@@ -39,12 +41,43 @@ public class CalendarView extends LinearLayout {
 	calendarAdapter = new CalendarAdapter(gridView);
 	notes = (EditText) findViewById(R.id.cal_notes);
 	Button prevMonth = (Button) findViewById(R.id.cal_preMonth);
+	doneBtn = (Button) findViewById(R.id.cal_done);
+
 	prevMonth.setOnClickListener(getMonthChangeHandler(-1));
 	nextMonthBtn = (Button) findViewById(R.id.cal_nextMonth);
 	nextMonthBtn.setOnClickListener(getMonthChangeHandler(1));
+	setNotesDoneVisibility(false);
 
-	InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-	inputManager.hideSoftInputFromWindow(notes.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+	notes.setOnTouchListener(new OnTouchListener() {
+	    @Override
+	    public boolean onTouch(View v, MotionEvent event) {
+		setNotesDoneVisibility(true);
+		return false;
+	    }
+	});
+
+	notes.setOnFocusChangeListener(new OnFocusChangeListener() {
+	    @Override
+	    public void onFocusChange(View arg0, boolean focus) {
+		setNotesDoneVisibility(focus);
+	    }
+	});
+
+	doneBtn.setOnClickListener(new OnClickListener() {
+	    @Override
+	    public void onClick(View v) {
+		setNotesDoneVisibility(false);
+		InputMethodManager inputManager = (InputMethodManager) CalendarView.this.context
+			.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager.hideSoftInputFromWindow(notes.getApplicationWindowToken(),
+			InputMethodManager.HIDE_NOT_ALWAYS);
+	    }
+	});
+    }
+    
+    public void setNotesDoneVisibility(boolean visible) {
+	int visibility = visible ? View.VISIBLE : View.GONE;
+	doneBtn.setVisibility(visibility);
     }
 
     public void setTask(Task aTask) {
@@ -98,4 +131,5 @@ public class CalendarView extends LinearLayout {
     public String getNotes() {
 	return notes.getText().toString();
     }
+
 }

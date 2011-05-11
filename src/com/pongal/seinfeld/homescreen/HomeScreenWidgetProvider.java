@@ -148,7 +148,7 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
     private static PendingIntent getHeaderPendingIntent(Context context, int appWidetId, TaskSnippet taskSnip) {
 	Intent intent = new Intent(context, CalendarActivity.class);
 	intent.putExtra("taskId", taskSnip.taskId);
-	PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	PendingIntent pendingIntent = PendingIntent.getActivity(context, appWidetId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 	return pendingIntent;
     }
 
@@ -238,10 +238,12 @@ public class HomeScreenWidgetProvider extends AppWidgetProvider {
 
 	TaskSharedConfigNames cfgNames = new TaskSharedConfigNames(widgetId);
 	final int taskId = config.getInt(cfgNames.Id, -1);
+	
 	final String taskName = config.getString(cfgNames.Name, "");
 	final boolean doneToday = config.getBoolean(cfgNames.Done, false);
 	TaskSnippet taskInfo = new TaskSnippet(taskId, taskName, doneToday);
-
+	Log.d(Constants.LogTag, "Task snippet: " + taskInfo);
+	
 	/*
 	 * TaskSnippet taskInfo = new TaskSnippet(); taskInfo.taskId =
 	 * config.getInt(String.format(WidgetConfiguration.TASK_ID_SHR,
