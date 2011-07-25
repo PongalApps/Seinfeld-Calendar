@@ -44,7 +44,6 @@ public class EditTaskListActivity extends Activity {
 
     private OnClickListener getEditTaskClickHandler() {
 	return new OnClickListener() {
-	    @Override
 	    public void onClick(View taskView) {
 		selectedTask = (Task) taskView.getTag();
 		showDialog(EditTaskView.EDIT_TASK);
@@ -79,7 +78,6 @@ public class EditTaskListActivity extends Activity {
 
     private TaskUpdatedHandler getSaveTaskHandler(final int dialogType) {
 	return new TaskUpdatedHandler() {
-	    @Override
 	    public void onUpdate(Task task) {
 		dbManager.updateTask(task);
 		refreshTaskList();

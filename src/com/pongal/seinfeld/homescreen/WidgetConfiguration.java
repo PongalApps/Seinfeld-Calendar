@@ -1,6 +1,5 @@
 package com.pongal.seinfeld.homescreen;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Set;
@@ -113,7 +112,6 @@ public class WidgetConfiguration extends Activity {
 
     private OnClickListener getTaskClickListener() {
 	return new OnClickListener() {
-	    @Override
 	    public void onClick(View v) {
 		final Context context = getApplicationContext();
 		final Task task = (Task) v.getTag();

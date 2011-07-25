@@ -6,8 +6,8 @@ import java.util.Set;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -67,12 +67,10 @@ public class CalendarAdapter extends BaseAdapter {
 	selectHandler.add(handler);
     }
 
-    @Override
     public int getCount() {
 	return count + HEADERS.length;
     }
 
-    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 	Context context = parent.getContext();
 	TextView textView = (TextView) convertView;
@@ -134,7 +132,6 @@ public class CalendarAdapter extends BaseAdapter {
 
     private OnClickListener getDateClickListener() {
 	return new OnClickListener() {
-	    @Override
 	    public void onClick(View view) {
 		DateState data = (DateState) view.getTag();
 		if (data != null) {
@@ -165,12 +162,10 @@ public class CalendarAdapter extends BaseAdapter {
 	}
     }
 
-    @Override
     public Object getItem(int arg0) {
 	return null;
     }
 
-    @Override
     public long getItemId(int position) {
 	return 0;
     }

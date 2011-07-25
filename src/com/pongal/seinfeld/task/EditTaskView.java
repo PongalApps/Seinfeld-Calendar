@@ -12,9 +12,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.pongal.seinfeld.R;
 import com.pongal.seinfeld.Util;
@@ -83,7 +83,6 @@ public class EditTaskView extends Dialog {
 	});
 	
 	reminderCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-	    @Override
 	    public void onCheckedChanged(CompoundButton chkBtn, boolean isChecked) {
 		timePicker.setEnabled(isChecked);
 		timePicker.setVisibility(isChecked ? View.VISIBLE : View.GONE);
@@ -97,7 +96,6 @@ public class EditTaskView extends Dialog {
 
     private View.OnClickListener getCancelHandler() {
 	return new View.OnClickListener() {
-	    @Override
 	    public void onClick(View view) {
 		dismiss();
 	    }
@@ -106,7 +104,6 @@ public class EditTaskView extends Dialog {
 
     private View.OnClickListener getSaveHandler() {
 	return new View.OnClickListener() {
-	    @Override
 	    public void onClick(View view) {
 		if (!taskName.getText().equals(task.getText())) {
 		    task.setText(taskName.getText().toString());

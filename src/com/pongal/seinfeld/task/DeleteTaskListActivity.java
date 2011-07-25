@@ -35,7 +35,6 @@ public class DeleteTaskListActivity extends Activity {
 
     private OnClickListener getDeleteTaskClickHandler() {
 	return new OnClickListener() {
-	    @Override
 	    public void onClick(View taskView) {
 		Task task = (Task) taskView.getTag();
 		dbManager.deleteTask(task);

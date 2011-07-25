@@ -6,8 +6,8 @@ import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 
 public class SplashScreenActivity extends Activity {
 
@@ -21,11 +21,10 @@ public class SplashScreenActivity extends Activity {
 		.setText(Html
 			.fromHtml("This application was inspired by Brad Issac's article "
 				+ "<a href=\"http://lifehacker.com/#!281626/jerry-seinfelds-productivity-secret\">'Jerry Seinfeld's productivity secret'</a> "
-				+ "<br><br> Thanks to Rajesh Babu for sharing this link"));
+				));
 	aboutContent.setMovementMethod(LinkMovementMethod.getInstance());
 	LinearLayout parent = (LinearLayout) findViewById(R.id.splash);
 	parent.setOnClickListener(new View.OnClickListener() {
-	    @Override
 	    public void onClick(View v) {
 		 finish();
 	    }

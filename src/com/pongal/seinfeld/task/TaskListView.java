@@ -35,7 +35,7 @@ public class TaskListView extends LinearLayout {
     }
 
     public void addQuestionClickListener(OnClickListener clickListener) {
-	questionView.setVisibility(View.VISIBLE);
+	//questionView.setVisibility(View.VISIBLE);
 	questionView.setOnClickListener(clickListener);
     }
 
@@ -91,7 +91,6 @@ public class TaskListView extends LinearLayout {
 
     private OnTouchListener getHighlightListener() {
 	return new OnTouchListener() {
-	    @Override
 	    public boolean onTouch(View v, MotionEvent event) {
 		if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
 		    v.setBackgroundResource(R.layout.taskbg_highlt);

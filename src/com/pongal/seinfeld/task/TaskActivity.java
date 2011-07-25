@@ -63,7 +63,6 @@ public class TaskActivity extends Activity {
 
     private OnClickListener getTaskClickHandler() {
 	return new OnClickListener() {
-	    @Override
 	    public void onClick(View view) {
 		Task task = (Task) view.getTag();
 		Intent intent = new Intent(TaskActivity.this, CalendarActivity.class);
@@ -75,7 +74,6 @@ public class TaskActivity extends Activity {
 
     public OnClickListener getQuestionIconListener() {
 	return new OnClickListener() {
-	    @Override
 	    public void onClick(View v) {
 		Intent intent = new Intent(TaskActivity.this, SplashScreenActivity.class);
 		startActivity(intent);
@@ -111,7 +109,6 @@ public class TaskActivity extends Activity {
     
     private TaskUpdatedHandler getSaveTaskHandler(final int dialogType) {
 	return new TaskUpdatedHandler() {
-	    @Override
 	    public void onUpdate(Task task) {
 		final int taskId = dbManager.updateTask(task);
 		refreshTaskList();

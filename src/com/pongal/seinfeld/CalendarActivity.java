@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.pongal.seinfeld.DateState.Status;
@@ -61,7 +61,6 @@ public class CalendarActivity extends Activity {
 
     private OnEditorActionListener getNotesActionListener() {
 	return new OnEditorActionListener() {
-	    @Override
 	    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 		Log.d(Constants.LogTag, (actionId == EditorInfo.IME_ACTION_DONE) + "");
 		if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -80,7 +79,6 @@ public class CalendarActivity extends Activity {
 
     public CalendarSelectHandler getCalendarSelectHandler() {
 	return new CalendarSelectHandler() {
-	    @Override
 	    public void onChange(DateState e) {
 		if (e.getStatus() == Status.SELECTED) {
 		    task.addAccomplishedDates(e.getDate());

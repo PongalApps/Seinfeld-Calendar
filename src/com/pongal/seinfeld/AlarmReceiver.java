@@ -1,7 +1,5 @@
 package com.pongal.seinfeld;
 
-import com.pongal.seinfeld.data.Constants;
-
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -12,6 +10,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.pongal.seinfeld.data.Constants;
 
 public class AlarmReceiver extends BroadcastReceiver {
     @Override

@@ -1,7 +1,5 @@
 package com.pongal.seinfeld.homescreen;
 
-import java.util.Calendar;
-
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;

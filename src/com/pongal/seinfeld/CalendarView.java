@@ -49,7 +49,6 @@ public class CalendarView extends LinearLayout {
 	setNotesDoneVisibility(false);
 
 	notes.setOnTouchListener(new OnTouchListener() {
-	    @Override
 	    public boolean onTouch(View v, MotionEvent event) {
 		setNotesDoneVisibility(true);
 		return false;
@@ -57,14 +56,12 @@ public class CalendarView extends LinearLayout {
 	});
 
 	notes.setOnFocusChangeListener(new OnFocusChangeListener() {
-	    @Override
 	    public void onFocusChange(View arg0, boolean focus) {
 		setNotesDoneVisibility(focus);
 	    }
 	});
 
 	doneBtn.setOnClickListener(new OnClickListener() {
-	    @Override
 	    public void onClick(View v) {
 		setNotesDoneVisibility(false);
 		InputMethodManager inputManager = (InputMethodManager) CalendarView.this.context
