@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.pongal.paid.seinfeld.data.Constants;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
 
@@ -16,8 +17,10 @@ public class BootupReceiver extends BroadcastReceiver {
 	ReminderTimeService reminderTimeService = new ReminderTimeService(context);
 	Set<Task> tasks = getTasks(context);
 	for (Task t : tasks) {
-	    Log.d(null, "BootupReceiver: Registering '" + t.getText() + "' for reminder [" + t.getReminderTime().toString() + "]");
 	    reminderTimeService.setReminder(t);
+	    
+	    final String reminderInfo = t.isReminderSet() ? " for reminder [" +  t.getReminderTime().toString() + "]" : "";
+	    Log.d(Constants.LogTag, "BootupReceiver: Registering '" + t.getText() + "'" + reminderInfo);
 	}
 
 	// TODO: Have to broadcast HomeScreenWidgetProvider.ACTION_UPDATE_DATE?

@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.pongal.paid.seinfeld.DateState.Status;
 import com.pongal.paid.seinfeld.data.Date;
 import com.pongal.paid.seinfeld.data.Task;
-import com.pongal.paid.seinfeld.R;
+import com.pongal.seinfeld.R;
 
 public class CalendarAdapter extends BaseAdapter {
 

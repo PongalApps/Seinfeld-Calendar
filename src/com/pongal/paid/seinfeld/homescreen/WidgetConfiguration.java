@@ -21,10 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pongal.paid.seinfeld.Util;
-import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.data.Constants;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
+import com.pongal.seinfeld.R;
 
 public class WidgetConfiguration extends Activity {
 
@@ -97,16 +97,22 @@ public class WidgetConfiguration extends Activity {
 	edit.commit();
     }
 
-    private boolean isWidgetAlreadyAdded(Task task) {
+    private boolean isWidgetAlreadyAdded(Task task)
+    {
 	SharedPreferences config = getSharedPreferences(WidgetConfiguration.PREFS_NAME, 0);
 	Map<String, ?> sharedPrefs = config.getAll();
-	for (String key : sharedPrefs.keySet()) {
-	    if (key.startsWith(TASK_ID_SHR.replace("%d", ""))) {
+	for (String key : sharedPrefs.keySet())
+	{
+	    if (key.startsWith(TASK_ID_SHR.replace("%d", "")))
+	    {
 		int taskId = config.getInt(key, -1);
 		if (task.getId() == taskId)
+		{
 		    return true;
+		}
 	    }
 	}
+	
 	return false;
     }
 
@@ -135,18 +141,29 @@ public class WidgetConfiguration extends Activity {
 	setResult(RESULT_CANCELED, cancelResultValue);
     }
 
-    private void setDateChangeIntent() {
-	Intent intent = new Intent(HomeScreenWidgetProvider.ACTION_UPDATE_DATE);
+    public void setDateChangeIntent() {
+	final Context context = getApplicationContext();
+	
+	Intent intent = new Intent(context, HomeScreenWidgetProvider.class);
+	intent.setAction(HomeScreenWidgetProvider.ACTION_UPDATE_DATE);	
 	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId);
 	intent.setData(getUriData(appWidgetId));
-	PendingIntent datePendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent,
-		PendingIntent.FLAG_UPDATE_CURRENT);
+	PendingIntent datePendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+	/*final ComponentName provider = new ComponentName(context, WidgetConfiguration.class);
+	final int[] appWidgetIds = AppWidgetManager.getInstance(context).getAppWidgetIds(provider);
+	
+	Intent intent = new Intent(context, HomeScreenWidgetProvider.class);
+	intent.setAction(HomeScreenWidgetProvider.ACTION_UPDATE_DATE);
+	intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetId);
+	// intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
+	PendingIntent datePendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);*/
 
-	AlarmManager alarms = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+	AlarmManager alarms = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 	alarms.cancel(datePendingIntent);
 	alarms.setRepeating(AlarmManager.RTC, getTimeForMidnight(), AlarmManager.INTERVAL_DAY, datePendingIntent);
     }
-
+    
     private long getTimeForMidnight() {
 	Calendar midnight = Calendar.getInstance();
 	midnight.add(Calendar.DATE, 1);

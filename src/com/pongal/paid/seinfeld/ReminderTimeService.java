@@ -37,9 +37,10 @@ public class ReminderTimeService {
         
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Service.ALARM_SERVICE);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, msTime, AlarmManager.INTERVAL_DAY, pendingIntent);
-	
-	Log.d(Constants.LogTag, "Reminder set. (" + task.getId() + "). " + task.getText() + ". " + hour + ":" + mins);
-	Toast.makeText(context, "Reminder set for " + hour + ":" + mins, Toast.LENGTH_LONG).show();
+        
+        final String msgText = String.format("%s (%d): Reminder set for %d : %d", task.getText(), task.getId(), hour, mins);
+	Log.d(Constants.LogTag, msgText);	
+	Toast.makeText(context, msgText, Toast.LENGTH_LONG).show();
     }
 
     public void cancelReminder(Task task) {

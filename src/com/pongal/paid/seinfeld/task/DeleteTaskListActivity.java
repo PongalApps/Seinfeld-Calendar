@@ -8,10 +8,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.pongal.paid.seinfeld.Util;
-import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
 import com.pongal.paid.seinfeld.homescreen.HomeScreenWidgetProvider;
+import com.pongal.seinfeld.R;
 
 public class DeleteTaskListActivity extends Activity {
 

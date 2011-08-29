@@ -17,8 +17,8 @@ import android.widget.TimePicker;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.pongal.paid.seinfeld.Util;
-import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.data.Task;
+import com.pongal.seinfeld.R;
 
 public class EditTaskView extends Dialog {
 

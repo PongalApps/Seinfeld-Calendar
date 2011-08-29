@@ -1,5 +1,6 @@
 package com.pongal.paid.seinfeld;
 
+
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -11,13 +12,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.data.Constants;
+import com.pongal.seinfeld.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    @Override
     public void onReceive(Context context, Intent intent) {
-	Log.d(null, "Received alarm intent");
+	Log.d(Constants.LogTag, "AlarmReceiver.onReceive(" + intent.getAction() + ")"); 
 	
 	final Bundle bundle = intent.getExtras();
 	final int taskId = bundle.getInt("taskId");
@@ -37,7 +37,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	NotificationManager notificationManager = (NotificationManager) context.getSystemService(Activity.NOTIFICATION_SERVICE);
 	notificationManager.notify(taskId, notification);
 
-	Log.i(getClass().getSimpleName(), "Sucessfully Changed Time");
+	Log.i(Constants.LogTag, "Sucessfully Changed Time");
     }
     
     private static Uri getUri(int taskId) {

@@ -16,7 +16,7 @@ import com.pongal.paid.seinfeld.data.Date;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
 import com.pongal.paid.seinfeld.homescreen.HomeScreenWidgetProvider;
-import com.pongal.paid.seinfeld.R;
+import com.pongal.seinfeld.R;
 
 public class CalendarActivity extends Activity {
     DBManager dbManager;

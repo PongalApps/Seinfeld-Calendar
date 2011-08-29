@@ -1,6 +1,6 @@
 package com.pongal.paid.seinfeld;
 
-import com.pongal.paid.seinfeld.R;
+import com.pongal.seinfeld.R;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -23,7 +23,7 @@ public class SplashScreenActivity extends Activity {
 		.setText(Html
 			.fromHtml("This application was inspired by Brad Issac's article "
 				+ "<a href=\"http://lifehacker.com/#!281626/jerry-seinfelds-productivity-secret\">'Jerry Seinfeld's productivity secret'</a> "
-				));
+				+ "<br><br> Thanks to Rajesh Babu for sharing this link"));
 	aboutContent.setMovementMethod(LinkMovementMethod.getInstance());
 	LinearLayout parent = (LinearLayout) findViewById(R.id.splash);
 	parent.setOnClickListener(new View.OnClickListener() {
