@@ -15,7 +15,6 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.pongal.paid.seinfeld.data.Date;
 import com.pongal.paid.seinfeld.data.Task;
-import com.pongal.seinfeld.R;
 
 public class CalendarView extends LinearLayout {
 

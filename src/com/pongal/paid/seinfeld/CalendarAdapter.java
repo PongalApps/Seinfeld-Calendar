@@ -6,8 +6,8 @@ import java.util.Set;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.pongal.paid.seinfeld.DateState.Status;
 import com.pongal.paid.seinfeld.data.Date;
 import com.pongal.paid.seinfeld.data.Task;
-import com.pongal.seinfeld.R;
 
 public class CalendarAdapter extends BaseAdapter {
 

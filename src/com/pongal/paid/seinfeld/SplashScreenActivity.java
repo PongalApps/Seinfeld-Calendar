@@ -1,15 +1,13 @@
 package com.pongal.paid.seinfeld;
 
-import com.pongal.seinfeld.R;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 
 public class SplashScreenActivity extends Activity {
 

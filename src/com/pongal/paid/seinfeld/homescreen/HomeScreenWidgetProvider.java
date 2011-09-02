@@ -15,13 +15,13 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.pongal.paid.seinfeld.CalendarActivity;
+import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.data.Constants;
 import com.pongal.paid.seinfeld.data.Date;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.data.TaskSnippet;
 import com.pongal.paid.seinfeld.db.DBManager;
 import com.pongal.paid.seinfeld.homescreen.WidgetConfiguration.TaskSharedConfigNames;
-import com.pongal.seinfeld.R;
 
 public class HomeScreenWidgetProvider extends AppWidgetProvider {
 

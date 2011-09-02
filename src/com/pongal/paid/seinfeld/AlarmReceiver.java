@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.pongal.paid.seinfeld.data.Constants;
-import com.pongal.seinfeld.R;
 
 public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {

@@ -10,6 +10,7 @@ import android.util.Log;
 import com.pongal.paid.seinfeld.data.Constants;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
+import com.pongal.paid.seinfeld.homescreen.HomeScreenWidgetProvider;
 
 public class BootupReceiver extends BroadcastReceiver {
     @Override
@@ -22,10 +23,7 @@ public class BootupReceiver extends BroadcastReceiver {
 	    final String reminderInfo = t.isReminderSet() ? " for reminder [" +  t.getReminderTime().toString() + "]" : "";
 	    Log.d(Constants.LogTag, "BootupReceiver: Registering '" + t.getText() + "'" + reminderInfo);
 	}
-
-	// TODO: Have to broadcast HomeScreenWidgetProvider.ACTION_UPDATE_DATE?
-	// or HomeScreenWidgetProvider.ACTION_REFRESH? so that the home widgets
-	// refresh themselves	
+	context.sendBroadcast(new Intent(HomeScreenWidgetProvider.ACTION_DATE_CHANGED));
     }
 
     private Set<Task> getTasks(Context context) {

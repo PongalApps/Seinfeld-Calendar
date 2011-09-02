@@ -20,11 +20,11 @@ import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.Util;
 import com.pongal.paid.seinfeld.data.Constants;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
-import com.pongal.seinfeld.R;
 
 public class WidgetConfiguration extends Activity {
 

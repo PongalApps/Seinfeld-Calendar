@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.pongal.paid.seinfeld.R;
 import com.pongal.paid.seinfeld.data.Task;
-import com.pongal.seinfeld.R;
 
 public class TaskListView extends LinearLayout {
 

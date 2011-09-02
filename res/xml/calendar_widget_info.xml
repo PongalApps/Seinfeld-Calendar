@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
 	android:updatePeriodMillis="86400000" android:initialLayout="@layout/home_widget"
-	android:minWidth="146dp" android:minHeight="72dp" android:configure="com.pongal.seinfeld.homescreen.WidgetConfiguration">
+	android:minWidth="146dp" android:minHeight="72dp" android:configure="com.pongal.paid.seinfeld.homescreen.WidgetConfiguration">
 </appwidget-provider>

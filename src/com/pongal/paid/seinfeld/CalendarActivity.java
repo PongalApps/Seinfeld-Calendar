@@ -6,8 +6,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.pongal.paid.seinfeld.DateState.Status;
@@ -16,7 +16,6 @@ import com.pongal.paid.seinfeld.data.Date;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
 import com.pongal.paid.seinfeld.homescreen.HomeScreenWidgetProvider;
-import com.pongal.seinfeld.R;
 
 public class CalendarActivity extends Activity {
     DBManager dbManager;
