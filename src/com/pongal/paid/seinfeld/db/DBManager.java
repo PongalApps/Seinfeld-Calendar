@@ -64,6 +64,8 @@ public class DBManager {
 		task.setReminderTime(new java.util.Date(reminderTimeMilliSecs));
 	    }
 	    
+	    task.setPhoneNumber(result.getInt(3));
+	    task.setReminderText(result.getString(4));
 	    Cursor dates = database.rawQuery("select date from Status where task_id = ? order by date", taskIds);
 	    while (dates.moveToNext()) {
 		Date date = new Date(dates.getString(0));
@@ -98,11 +100,11 @@ public class DBManager {
 	final java.util.Date reminderTime = task.getReminderTime();
 	final String milliSecondsText = reminderTime == null ? "" : String.valueOf(reminderTime.getTime());
 	
-	final String formatSpec = "insert or replace into task(id, name, reminder) values (%s, %s, %s)";
-	Log.d(Constants.LogTag, "updateTask: " + String.format(formatSpec, task.getId(), task.getText(), milliSecondsText));
+	final String formatSpec = "insert or replace into task(id, name, reminder, phone_number, reminder_text) values (%s, %s, %s, %s, %s)";
+	Log.d(Constants.LogTag, "updateTask: " + String.format(formatSpec, task.getId(), task.getText(), milliSecondsText, task.getPhoneNumber(), task.getReminderText()));
 	
-	String insertOrUpdateQuery = "insert or replace into task(id, name, reminder) values (?, ?, ?);";
-	database.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText(), milliSecondsText });
+	String insertOrUpdateQuery = "insert or replace into task(id, name, reminder, phone_number, reminder_text) values (?, ?, ?, ?, ?);";
+	database.execSQL(insertOrUpdateQuery, new Object[] { task.getId(), task.getText(), milliSecondsText, task.getPhoneNumber(), task.getReminderText() });
 	
 	Cursor taskIds = database.rawQuery("select id from task where name = ?", new String[] { task.getText() });
 	taskIds.moveToNext();
@@ -193,6 +195,7 @@ public class DBManager {
 	    v1Changes(db);
 	    v2Changes(db);
 	    v3Changes(db);
+	    v4Changes(db);
 	}
 
 	@Override
@@ -200,8 +203,12 @@ public class DBManager {
 	    if (existingVersion == 1) {
 		v2Changes(db);
 		v3Changes(db);
+		v4Changes(db);
 	    } else if (existingVersion == 2) {
 		v3Changes(db);
+		v4Changes(db);
+	    } else if (existingVersion == 3){
+		v4Changes(db);
 	    }
 	}
 
@@ -221,6 +228,11 @@ public class DBManager {
 	private void v3Changes(SQLiteDatabase db) {
 	    String createNotes = "alter table TASK add column REMINDER text;";
 	    db.execSQL(createNotes);
+	}
+	
+	private void v4Changes(SQLiteDatabase db) {
+	    db.execSQL("alter table Task add column phone_number text");
+	    db.execSQL("alter table Task add column reminder_text text");
 	}
     }
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
@@ -32,6 +33,9 @@ public class EditTaskView extends Dialog {
     Button cancelButton;
     CheckBox reminderCheckBox;
     TimePicker timePicker;
+    CheckBox sendReminderCheckBox;
+    EditText phoneNumber;
+    EditText reminderText;
 
     public EditTaskView(Context context) {
 	super(context);
@@ -53,6 +57,9 @@ public class EditTaskView extends Dialog {
 	this.cancelButton = (Button) findViewById(R.id.cancelTask);
 	this.reminderCheckBox = (CheckBox) findViewById(R.id.setReminder);
 	this.timePicker = (TimePicker) findViewById(R.id.timePicker);
+	this.sendReminderCheckBox = (CheckBox) findViewById(R.id.sendReminder);
+	this.phoneNumber = (EditText) findViewById(R.id.phoneNumber);
+	this.reminderText = (EditText) findViewById(R.id.reminderText);
 
 	setTitle(type == EditTaskView.EDIT_TASK ? "Edit Task" : "Add Task");
 	cancelButton.setOnClickListener(getCancelHandler());
@@ -62,6 +69,12 @@ public class EditTaskView extends Dialog {
 	taskName.setText(task.getText());
 	reminderCheckBox.setChecked(task.isReminderSet());
 	timePicker.setVisibility(task.isReminderSet() ? View.VISIBLE : View.GONE);
+	sendReminderCheckBox.setVisibility(task.isReminderSet() ? View.VISIBLE : View.GONE);
+	sendReminderCheckBox.setChecked(task.isSendReminderSet());
+	phoneNumber.setText(task.getPhoneNumber().toString());
+	reminderText.setText(task.getReminderText());
+	phoneNumber.setVisibility(task.isSendReminderSet() ? View.VISIBLE : View.GONE);
+	reminderText.setVisibility(task.isSendReminderSet() ? View.VISIBLE : View.GONE);	
 
 	if (task.isReminderSet()) {
 	    final java.util.Date reminderTime = task.getReminderTime();
@@ -84,12 +97,21 @@ public class EditTaskView extends Dialog {
 	
 	reminderCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	    public void onCheckedChanged(CompoundButton chkBtn, boolean isChecked) {
-		timePicker.setEnabled(isChecked);
-		timePicker.setVisibility(isChecked ? View.VISIBLE : View.GONE);
-		
+		toggleVisibility(timePicker, isChecked);
+		toggleVisibility(sendReminderCheckBox, isChecked);
+		toggleVisibility(phoneNumber, isChecked && sendReminderCheckBox.isChecked());
+		toggleVisibility(reminderText, isChecked && sendReminderCheckBox.isChecked());
+
 		final Calendar cal = Calendar.getInstance();
 		timePicker.setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
 		timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
+	    }
+	});
+	
+	sendReminderCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+	    public void onCheckedChanged(CompoundButton chkBtn, boolean isChecked) {
+		toggleVisibility(phoneNumber, isChecked);
+		toggleVisibility(reminderText, isChecked);
 	    }
 	});
     }
@@ -114,11 +136,23 @@ public class EditTaskView extends Dialog {
 			final long msTime = Util.convertToMilliseconds(timePicker.getCurrentHour(), timePicker.getCurrentMinute());			
 			task.setReminderTime(new java.util.Date(msTime));			
 		    }
+		    
+		    task.setPhoneNumber(null);
+		    task.setReminderText(null);
+		    if(sendReminderCheckBox.isChecked()){
+			task.setPhoneNumber(Integer.parseInt(phoneNumber.getText().toString()));
+			task.setReminderText(reminderText.getText().toString());
+		    }
 
 		    handler.onUpdate(task);
 		}
 	    }
 	};
+    }
+
+    private void toggleVisibility(View view, boolean isChecked) {
+	view.setEnabled(isChecked);
+	view.setVisibility(isChecked ? View.VISIBLE : View.GONE);
     }
 
 }

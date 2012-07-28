@@ -18,6 +18,30 @@
 		<TimePicker android:clickable="false" android:id="@+id/timePicker"
 			android:layout_height="wrap_content" android:visibility="visible"
 			android:layout_gravity="left" android:layout_width="wrap_content"></TimePicker>
+
+		<CheckBox
+		    android:id="@+id/sendReminder"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:text="Send Reminder as SMS" />
+
+		<EditText
+		    android:id="@+id/phoneNumber"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:ems="10"
+		    android:inputType="number" >
+
+		    <requestFocus />
+		</EditText>
+
+		<EditText
+		    android:id="@+id/reminderText"
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content"
+		    android:ems="10"
+		    android:inputType="textMultiLine" />
+
 	</LinearLayout>
 	<LinearLayout android:id="@+id/linearLayout1"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"

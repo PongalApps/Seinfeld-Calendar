@@ -12,6 +12,8 @@ public final class Task {
     private Set<Date> accomplishedDates = new LinkedHashSet<Date>();
     private Map<Date, String> notes = new HashMap<Date, String>();
     private java.util.Date reminderTime;
+    private Integer phoneNumber;
+    private String reminderText;
 
     public Task() {
     }
@@ -105,4 +107,26 @@ public final class Task {
     public boolean isTodayAccomplished() {
 	return isAccomplishedDate(new Date());
     }
+
+    public boolean isSendReminderSet() {
+	return phoneNumber != null && reminderText != null;
+    }
+
+    public void setPhoneNumber(Integer phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setReminderText(String reminderText) {
+        this.reminderText = reminderText;
+    }
+
+    public Integer getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public String getReminderText() {
+        return reminderText;
+    }
+    
+    
 }
