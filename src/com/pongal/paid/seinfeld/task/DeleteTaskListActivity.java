@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.pongal.paid.seinfeld.R;
+import com.pongal.paid.seinfeld.ReminderTimeService;
 import com.pongal.paid.seinfeld.Util;
 import com.pongal.paid.seinfeld.data.Task;
 import com.pongal.paid.seinfeld.db.DBManager;
@@ -37,6 +38,7 @@ public class DeleteTaskListActivity extends Activity {
 	return new OnClickListener() {
 	    public void onClick(View taskView) {
 		Task task = (Task) taskView.getTag();
+		new ReminderTimeService(getApplicationContext()).cancelReminder(task);
 		dbManager.deleteTask(task);
 		refreshTaskList();
 		sendBroadcast(Util.getBroadcast(task, HomeScreenWidgetProvider.ACTION_DELETE));
