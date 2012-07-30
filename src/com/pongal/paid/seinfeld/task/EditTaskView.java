@@ -71,17 +71,17 @@ public class EditTaskView extends Dialog {
 	timePicker.setVisibility(task.isReminderSet() ? View.VISIBLE : View.GONE);
 	sendReminderCheckBox.setVisibility(task.isReminderSet() ? View.VISIBLE : View.GONE);
 	sendReminderCheckBox.setChecked(task.isSendReminderSet());
-	phoneNumber.setText(task.getPhoneNumber().toString());
+	phoneNumber.setText(task.getPhoneNumber());
 	reminderText.setText(task.getReminderText());
 	phoneNumber.setVisibility(task.isSendReminderSet() ? View.VISIBLE : View.GONE);
-	reminderText.setVisibility(task.isSendReminderSet() ? View.VISIBLE : View.GONE);	
+	reminderText.setVisibility(task.isSendReminderSet() ? View.VISIBLE : View.GONE);
 
 	if (task.isReminderSet()) {
 	    final java.util.Date reminderTime = task.getReminderTime();
 	    timePicker.setCurrentHour(reminderTime.getHours());
 	    timePicker.setCurrentMinute(reminderTime.getMinutes());
 	}
-	
+
 	taskName.addTextChangedListener(new TextWatcher() {
 	    public void onTextChanged(CharSequence charsequence, int i, int j, int k) {
 	    }
@@ -94,7 +94,7 @@ public class EditTaskView extends Dialog {
 		okButton.setEnabled(!(text.length() == 0));
 	    }
 	});
-	
+
 	reminderCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	    public void onCheckedChanged(CompoundButton chkBtn, boolean isChecked) {
 		toggleVisibility(timePicker, isChecked);
@@ -107,7 +107,7 @@ public class EditTaskView extends Dialog {
 		timePicker.setCurrentMinute(cal.get(Calendar.MINUTE));
 	    }
 	});
-	
+
 	sendReminderCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 	    public void onCheckedChanged(CompoundButton chkBtn, boolean isChecked) {
 		toggleVisibility(phoneNumber, isChecked);
@@ -129,17 +129,17 @@ public class EditTaskView extends Dialog {
 	    public void onClick(View view) {
 		if (!taskName.getText().equals(task.getText())) {
 		    task.setText(taskName.getText().toString());
-		    
+
 		    task.setReminderTime(null);
 		    if (reminderCheckBox.isChecked()) {
 			timePicker.clearFocus();
-			final long msTime = Util.convertToMilliseconds(timePicker.getCurrentHour(), timePicker.getCurrentMinute());			
-			task.setReminderTime(new java.util.Date(msTime));			
+			final long msTime = Util.convertToMilliseconds(timePicker.getCurrentHour(), timePicker.getCurrentMinute());
+			task.setReminderTime(new java.util.Date(msTime));
 		    }
-		    
+
 		    task.setPhoneNumber(null);
 		    task.setReminderText(null);
-		    if(sendReminderCheckBox.isChecked()){
+		    if (sendReminderCheckBox.isChecked()) {
 			task.setPhoneNumber(Integer.parseInt(phoneNumber.getText().toString()));
 			task.setReminderText(reminderText.getText().toString());
 		    }

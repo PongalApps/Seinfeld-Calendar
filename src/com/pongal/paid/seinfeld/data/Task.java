@@ -120,8 +120,8 @@ public final class Task {
         this.reminderText = reminderText;
     }
 
-    public Integer getPhoneNumber() {
-        return phoneNumber;
+    public String getPhoneNumber() {
+        return phoneNumber == null ? "" : phoneNumber.toString();
     }
 
     public String getReminderText() {

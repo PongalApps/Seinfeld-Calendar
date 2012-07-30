@@ -57,7 +57,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void sendSMS(Context context, Task task) {
         PendingIntent pi = PendingIntent.getActivity(context, 0, new Intent(context, AlarmReceiver.class), 0);
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(task.getPhoneNumber().toString(), null, task.getReminderText(), pi, null); 
+        sms.sendTextMessage(task.getPhoneNumber(), null, task.getReminderText(), pi, null); 
     }
 
 }
